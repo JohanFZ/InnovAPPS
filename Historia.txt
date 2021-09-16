@@ -20,4 +20,14 @@ poseo conocimientos en desarrollo de videojuegos con Unity y desarrollo de inter
 
 - SCRUM MASTER
 
-Soy David Echeverri Castrillón, tengo 36 años, normalista superior e ingeniero en sistemas; docente de Desarrollo de Software en la media técnica del Colegio San Francisco de Asís de la ciudad de Cali. Tengo conocimientos en gran variedad de lenguajes de programación y soy participante en desarrollo de un software de la secretaria de cultura y la gobernación del Valle (software de workshops culturales).
+Soy David Echeverri Castrillón, tengo 36 años, normalista superior e ingeniero en sistemas;
+ docente de Desarrollo de Software en la media técnica del Colegio San Francisco de Asís de la ciudad de Cali.
+ Tengo conocimientos en gran variedad de lenguajes de programación y soy participante en desarrollo de un software
+ de la secretaria de cultura y la gobernación del Valle (software de workshops culturales).
+
+- ANALISTA
+soy Johan Reyes, tengo 21 alos, vivo en Funza, Cundinamarca.
+Soy tecnico y tecnologo en sistemas trabajo como auxiliar de soporte tecnico HW,
+tengo conocimienots en reparacion de dispositivos, electronica, electricadad,
+soporte remoto, servidores, Cisco, por parte de progrmacion tengo conocimientos basicos
+en Java y en Phython.
