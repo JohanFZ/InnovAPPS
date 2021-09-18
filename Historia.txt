@@ -38,3 +38,8 @@ Soy estudiante de ingenieria de Sistemas y Computacion de la Universidad Naciona
 tengo conocimientos en lenguajes como python y java, asi como algunos conocimientos leves en C++ y Javascript,
 he trabajado en frameworks como vue.js, y tengo nociones de git y github para control de versiones.
 
+- Administrador de Bases de Datos
+Soy Sebastian Dario Giraldo Rodas, tengo 20 años, actualmente estudiante de 4 semestre de ingenieria 
+en sistemas de la universidad del valle, tengo conocimientos en java, c++, python como lenguajes de programación,
+y en mano de bases de datos enPostgrest y mysql.
+
