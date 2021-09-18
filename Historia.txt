@@ -31,3 +31,10 @@ Soy tecnico y tecnologo en sistemas trabajo como auxiliar de soporte tecnico HW,
 tengo conocimienots en reparacion de dispositivos, electronica, electricadad,
 soporte remoto, servidores, Cisco, por parte de progrmacion tengo conocimientos basicos
 en Java y en Phython.
+
+- PRODUCT OWNER
+Soy Juan Manuel, tengo 19 años, vivo en Bogota.
+Soy estudiante de ingenieria de Sistemas y Computacion de la Universidad Nacional de Colombia,
+tengo conocimientos en lenguajes como python y java, asi como algunos conocimientos leves en C++ y Javascript,
+he trabajado en frameworks como vue.js, y tengo nociones de git y github para control de versiones.
+
