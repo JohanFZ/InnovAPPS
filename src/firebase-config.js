@@ -7,3 +7,4 @@ export default{
   appId: "1:128964267039:web:db2a7199948f866a28592a",
   measurementId: "G-NRMXFZYFY3"
 }
+

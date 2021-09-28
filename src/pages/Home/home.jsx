@@ -44,7 +44,7 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-              <li><a href="">Crear Producto</a></li>
+              <li><a href="/vendedores">Crear Producto</a></li>
               <li><a href="">Listar Productos</a></li>
               <li><a href="">Actualizar Producto</a></li>
             </ul>
@@ -59,7 +59,6 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-              <li><a href="">Crear Usuario</a></li>
               <li><a href="">Listar Usuarios</a></li>
               <li><a href="">Actualizar Usuario</a></li>
             </ul>
