@@ -57,7 +57,7 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-              <li><a href="">Listar y Actualizar Usuarios</a></li>
+              <li><a href="/usuarios">Listar y Actualizar Usuarios</a></li>
             </ul>
           </li>
 
