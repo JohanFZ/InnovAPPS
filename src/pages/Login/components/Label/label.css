@@ -2,8 +2,7 @@
   font-size: 12px;
   font-weight: bold;
   color: #9FA2B4;
-}
-
-.div-label{
-  text-align: left;
+  width: 327px;
+  height: 30px;
+  padding: 0 30px;
 }

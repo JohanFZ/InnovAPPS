@@ -38,7 +38,7 @@
 .contenedor .image .title-h1{
   position: absolute;
   color: white;
-  font-size: 45px;
+  font-size: 42px;
   top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -66,14 +66,11 @@
 
 .contenedor .contentBx .formLogin #content{
   text-align: center;
-  padding: 20px;
-  line-height: 30px;
 }
 
 .contenedor .contentBx .formLogin #content h2{
   font-size: 25px;
   color: #A4A6B3;
-  padding: 0 0 20px;
 }
 
 .contenedor .contentBx .formLogin{
@@ -91,26 +88,27 @@
   font-size: 14px;
 }
 
-.contenedor .contentBx .formLogin form{
+.contenedor .contentBx .formLogin .form{
   text-align: center;
   align-items: center;
   justify-content: center;
 }
 
-.contenedor .contentBx .formLogin form .label{
+/* .contenedor .contentBx .formLogin .form .label{
   text-align: right;
-}
+} */
 
-.contenedor .contentBx .formLogin form p{
+.contenedor .contentBx .formLogin .form p{
   color: #A4A6B3;
+  margin: 0;
 }
 
-.contenedor .contentBx .formLogin form p a{
+.contenedor .contentBx .formLogin .form p a{
   text-decoration: none;
   color: #2FCEC5;
 }
 
-.contenedor .contentBx .formLogin form button{
+.contenedor .contentBx .formLogin .form button{
   width: 268px;
   font-size: 16px;
   font-weight: bold;
@@ -123,4 +121,26 @@
   border-radius: 24px;
   border: none;
   background: linear-gradient(90deg, #8DE7ED, #2FCEC5);
+}
+
+.input{
+  font-size: 14px;
+  width: 327px;
+  height: 30px;
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  border-bottom: 1px solid #A4A6B3;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-family: 'Mulish', sans-serif;
+  color: #A4A6B3;
+}
+
+
+.input::placeholder {
+  font-family: 'Mulish', sans-serif;
 }

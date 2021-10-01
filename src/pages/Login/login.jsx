@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './login.css';
 import LawFirm from '../../assets/img/law-firm.png';
 import Logo from '../../assets/img/logo.png';
 import Google from '../../assets/img/Google.png'
 import Title from './components/Title/title';
 import Label from './components/Label/label';
-import Input from './components/Input/input';
 
 export default function Login() {
 
@@ -24,15 +23,15 @@ export default function Login() {
               <Title text="Log In" />
               <p>Enter your email and password below</p>
             </div>
-            <form action="">
+            <div className="form">
               <Label text="EMAIL" />
-              <Input type="text" placeholder="Enter your Email" />
+              <input className="input" type="email" placeholder="Enter your Email"  />
               <br />
               <Label text="PASSWORD" />
-              <Input type="password" placeholder="Enter your Password" />
-              <button onClick="abrir()">Log In</button>
+              <input className="input" type="password" placeholder="Enter your Password"/>
+              <button>Log In</button>
               <p>Or</p>
-            </form>
+            </div>
           <a href="/home"><img src={Google} alt="" /></a>
           </div>
         </div>
