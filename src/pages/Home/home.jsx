@@ -30,7 +30,7 @@ export default function home() {
             </div>
             <ul className="sub-menu">
               <li><a href="">Crear Venta</a></li>
-              <li><a href="">Listar y Actualizar Ventas</a></li>
+              <li><a href="/ventas">Listar y Actualizar Ventas</a></li>
             </ul>
           </li>
 
