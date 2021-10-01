@@ -45,8 +45,7 @@ export default function home() {
             </div>
             <ul className="sub-menu">
               <li><a href="/vendedores">Crear Producto</a></li>
-              <li><a href="">Listar Productos</a></li>
-              <li><a href="">Actualizar Producto</a></li>
+              <li><a href="/lproductos">Listar y Actualizar Productos</a></li>
             </ul>
           </li>
 
@@ -59,8 +58,7 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-              <li><a href="">Listar Usuarios</a></li>
-              <li><a href="">Actualizar Usuario</a></li>
+              <li><a href="">Listar y Actualizar Usuarios</a></li>
             </ul>
           </li>
 
@@ -78,11 +76,11 @@ export default function home() {
           </li>
         </ul>
       </div>
-      <section class="home-section">
+      {/* <section class="home-section">
         <div class="home-content">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas consequatur rem deserunt ipsa suscipit aperiam iste voluptas, rerum sunt ut non quisquam cum enim, necessitatibus vel? Ullam suscipit necessitatibus dolores.</p>
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }
