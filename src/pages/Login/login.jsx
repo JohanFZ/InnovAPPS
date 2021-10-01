@@ -10,7 +10,7 @@ import Input from './components/Input/input';
 export default function Login() {
 
   return (
-    <section className="container">
+    <section className="contenedor">
       <div className="image">
       <img src={LawFirm} alt="" />
         <Title text="Lawyer's Firm" />
