@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './productos.css'
 import Home from '../Home/home'
@@ -25,6 +25,7 @@ class productos extends React.Component {
     busqueda: '',
     productos: [],
     abierto: false,
+    abiertoMensaje: false,
     form: {
       id: '',
       Descripcion: '',
@@ -35,6 +36,11 @@ class productos extends React.Component {
 
   abrirModal = (registro)=>{
     this.setState({ form: registro, abierto: !this.state.abierto})
+  }
+
+  abrirModalMensaje = () =>{
+    this.setState({abierto: false})
+    this.setState({abiertoMensaje : !this.state.abiertoMensaje})
   }
 
 
@@ -63,7 +69,12 @@ class productos extends React.Component {
 render() {
   return (
     <div>
+
+      {/* Barra del Menu */}
       <Home />
+
+    {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
+
       <section class="home-section">
         <h1>Listado de Productos</h1>
         <div className="content-info">
@@ -99,26 +110,36 @@ render() {
             </Table>
         </div>
       </section>
-      <Modal isOpen={this.state.abierto}>
-        <ModalHeader >Editar Producto</ModalHeader>
+
+      {/* Modal Ventana Actualizar */}
+
+      <Modal isOpen={this.state.abierto} className="md">
+        <ModalHeader >Editar Producto <b>#{this.state.form.id}</b></ModalHeader>
         <ModalBody>
-          <label> id:</label>
-          <input type="text" readOnly value={this.state.form.id}/>
+          <Label>Nombre:</Label>
+          <Input type="text" value={this.state.form.Descripcion}/>
 
-          <label>Nombre:</label>
-          <input type="text" value={this.state.form.Descripcion}/>
+          <Label>Valor Unitario:</Label>
+          <Input type="text" value={this.state.form.ValorUnitario}/>
 
-          <label>Valor Unitario:</label>
-          <input type="text" value={this.state.form.ValorUnitario}/>
-
-          <label>Estado:</label>
-          <input type="text" value={this.state.form.Estado}/>
+          <Label>Estado:</Label>
+          <Input type="text" value={this.state.form.Estado}/>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={this.abrirModal} color="primary">Do Something</Button>{' '}
-          <Button color="secondary">Cancel</Button>
+          <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
+          <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
         </ModalFooter>
       </Modal>
+
+      {/* Modal Mensaje informativo */}
+      <Modal isOpen={this.state.abiertoMensaje}>
+        <ModalHeader>Mensaje Informativo</ModalHeader>
+        <ModalBody>El producto se actualizo correctamente.</ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
+        </ModalFooter>
+      </Modal>
+
     </div>
   )
 }

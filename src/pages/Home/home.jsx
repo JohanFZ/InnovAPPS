@@ -14,7 +14,7 @@ export default function home() {
         </div>
         <ul className="nav-links">
           <li>
-            <a href="#">
+            <a href="/home">
               <i class='bx bx-grid-alt' ></i>
               <span className="link_name">Dashboard</span>
             </a>
@@ -29,9 +29,8 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-               <li><a href="">Crear Venta</a></li>
-              <li><a href="">Listar Ventas</a></li>
-              <li><a href="">Actualizar Venta</a></li>
+              <li><a href="">Crear Venta</a></li>
+              <li><a href="">Listar y Actualizar Ventas</a></li>
             </ul>
           </li>
 
