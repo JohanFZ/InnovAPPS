@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 
-.container{
+.contenedor{
   position: relative;
   width: 100%;
   height: 100vh;
@@ -20,13 +20,13 @@
   background-repeat: repeat;
 }
 
-.container .image{
+.contenedor .image{
   position: relative;
   width: 50%;
   height: 100%;
 }
 
-.container .image img{
+.contenedor .image img{
   position: absolute;
   top: 0;
   left: 0;
@@ -35,7 +35,7 @@
   object-fit: cover;
 }
 
-.container .image .title-h1{
+.contenedor .image .title-h1{
   position: absolute;
   color: white;
   font-size: 45px;
@@ -44,7 +44,7 @@
   transform: translate(-50%, -50%);
 }
 
-.container .image p{
+.contenedor .image p{
   text-align: center;
   position: relative;
   color: white;
@@ -53,7 +53,7 @@
   font-weight: normal;
 }
 
-.container .contentBx{
+.contenedor .contentBx{
   background: white;
   display: inline-flex;
   width: 391px;
@@ -64,53 +64,53 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-.container .contentBx .formLogin #content{
+.contenedor .contentBx .formLogin #content{
   text-align: center;
   padding: 20px;
   line-height: 30px;
 }
 
-.container .contentBx .formLogin #content h2{
+.contenedor .contentBx .formLogin #content h2{
   font-size: 25px;
   color: #A4A6B3;
   padding: 0 0 20px;
 }
 
-.container .contentBx .formLogin{
+.contenedor .contentBx .formLogin{
   text-align: center;
 }
 
-.container .contentBx .formLogin img{
+.contenedor .contentBx .formLogin img{
   width: 40px;
   height: 40px;
   margin: 10px;
 }
 
-.container .contentBx .formLogin #content p{
+.contenedor .contentBx .formLogin #content p{
   color: #A4A6B3;
   font-size: 14px;
 }
 
-.container .contentBx .formLogin form{
+.contenedor .contentBx .formLogin form{
   text-align: center;
   align-items: center;
   justify-content: center;
 }
 
-.container .contentBx .formLogin form .label{
+.contenedor .contentBx .formLogin form .label{
   text-align: right;
 }
 
-.container .contentBx .formLogin form p{
+.contenedor .contentBx .formLogin form p{
   color: #A4A6B3;
 }
 
-.container .contentBx .formLogin form p a{
+.contenedor .contentBx .formLogin form p a{
   text-decoration: none;
   color: #2FCEC5;
 }
 
-.container .contentBx .formLogin form button{
+.contenedor .contentBx .formLogin form button{
   width: 268px;
   font-size: 16px;
   font-weight: bold;
