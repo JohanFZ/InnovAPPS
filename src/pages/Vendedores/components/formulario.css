@@ -6,6 +6,7 @@
 	box-sizing: border-box;
 }
 
+
 .contenedor {
 	min-height: 100vh;
 	display: flex;
