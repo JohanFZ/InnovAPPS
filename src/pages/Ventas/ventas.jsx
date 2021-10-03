@@ -61,25 +61,7 @@ class ventas extends React.Component {
         this.setState({ modalEditar: false });
     }
 
-    editar = (dato) => {
-        var contador = 0;
-        var arreglo = this.state.data;
-        arreglo.map((registro) => {
-            if (dato.id == registro.id) {
-                arreglo[contador].valorTotalVenta = dato.valorTotalVenta;
-                arreglo[contador].identificador = dato.identificador;
-                arreglo[contador].cantidad = dato.cantidad;
-                arreglo[contador].precioUnitario = dato.precioUnitario;
-                arreglo[contador].fechaVenta = dato.fechaVenta;
-                arreglo[contador].documentoIdentificacion = dato.documentoIdentificacion;
-                arreglo[contador].nombreCliente = dato.nombreCliente;
-                arreglo[contador].encargadoVenta = dato.encargadoVenta;
-                arreglo[contador].estadoVenta = dato.estadoVenta;
-            }
-            contador++;
-        });
-        this.setState({ data: arreglo, modalEditar: false });
-    };
+ 
 
     handleChange = (e) => {
         this.setState({
@@ -143,7 +125,7 @@ class ventas extends React.Component {
                     <ModalBody>
                         <FormGroup>
                             <label>Identificador de la venta:</label>
-                            <input className="form-control" readOnly type="number" value={this.state.form.id}/>
+                            <input className="form-control" readOnly type="number"/>
                         </FormGroup>
 
                         <FormGroup>
@@ -214,9 +196,9 @@ class ventas extends React.Component {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button onClick={() => this.editar(this.state.form)}>Guardar</Button>
+                        <Button>Guardar</Button>
                         {" "}
-                        <Button onClick={() => this.cerrarModalEditar()}>Cancelar</Button>
+                        <Button>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
             </>)
