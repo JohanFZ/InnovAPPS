@@ -82,7 +82,7 @@ render() {
               </Input>
             </FormGroup>
           
-            <Button className= "boton-crearVenta" color="primary" onClick={this.abrirModalMensaje}>Sign in</Button>
+            <Button className= "boton-crearVenta" color="primary" onClick={this.abrirModalMensaje}>Crear Venta</Button>
           </Form>
         </div>        
       </section>
