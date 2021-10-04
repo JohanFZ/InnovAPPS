@@ -68,9 +68,8 @@ render() {
 
     {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
         
-      <section class="home-section">
-        <section class= "user-dashboard-back">
-            <section class = "user-dashboard-card">
+      <section class="home-section"> 
+          
                 <h1 class = "titulo">Listado de Usuarios</h1>
                 <div className="content-info">
                     <div className="search">
@@ -104,8 +103,8 @@ render() {
                         </tbody>
                     </Table>
                 </div>
-            </section>    
-        </section>
+               
+        
       </section>
 
       {/* Modal Ventana Actualizar */}
