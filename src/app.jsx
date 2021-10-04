@@ -3,20 +3,21 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import Ventas from './pages/Ventas/ventas';
 import Login from './pages/Login/login';
 import Home from './pages/Home/home';
+import Vendedores from './pages/Productos/crear_producto';
 import listarProductos from './pages/Productos/productos';
 import Usuarios from './pages/Usuarios/usuarios';
-import crear_producto from "./pages/Productos/crear_producto";
-
+import CrearVenta from './pages/Ventas/crearVenta';
 
 export function App(){
   return (
     <BrowserRouter>
     <Route exact path="/lproductos" component={listarProductos} />
     <Route exact path="/usuarios" component = {Usuarios} />
+    <Route exact path="/crearVenta" component = {CrearVenta} />
     <Route exact path="/ventas" component={Ventas} />
     <Route exact path="/" component={Login} />
     <Route exact path="/home" component={Home} />
-    <Route exact path="/crear_producto" component={crear_producto} />
+    <Route exact path="/vendedores" component={Vendedores} />
     </BrowserRouter>
   )
 }
