@@ -3,7 +3,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import Ventas from './pages/Ventas/ventas';
 import Login from './pages/Login/login';
 import Home from './pages/Home/home';
-import Vendedores from './pages/Productos/crear_producto';
+import Productos from './pages/Productos/crear_producto';
 import listarProductos from './pages/Productos/productos';
 import Usuarios from './pages/Usuarios/usuarios';
 import CrearVenta from './pages/Ventas/crearVenta';
@@ -17,7 +17,7 @@ export function App(){
     <Route exact path="/ventas" component={Ventas} />
     <Route exact path="/" component={Login} />
     <Route exact path="/home" component={Home} />
-    <Route exact path="/vendedores" component={Vendedores} />
+    <Route exact path="/crear_producto" component={Productos} />
     </BrowserRouter>
   )
 }
