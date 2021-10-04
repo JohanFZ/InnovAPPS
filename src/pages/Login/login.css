@@ -13,7 +13,7 @@
   height: 100vh;
   display: flex;
   align-items: center;
-  background-color: #e5e5f7;
+  background-color: #fff;
   background-position:  40px 0, 40px 0, 0 0, 0 0;
   background-size: 80px 80px;
   background-repeat: repeat;
@@ -79,12 +79,17 @@
 .contenedor .contentBx .formLogin img{
   width: 40px;
   height: 40px;
-  margin: 10px;
+  margin: 30px 0 20px 0;
 }
 
 .contenedor .contentBx .formLogin #content p{
   color: #A4A6B3;
   font-size: 14px;
+}
+
+.logo-google {
+  position: relative;
+  top: 30px;
 }
 
 .contenedor .contentBx .formLogin .form{
@@ -107,7 +112,7 @@
   color: #2FCEC5;
 }
 
-.contenedor .contentBx .formLogin .form button{
+/* .contenedor .contentBx .formLogin .form button{
   width: 268px;
   font-size: 16px;
   font-weight: bold;
@@ -120,9 +125,9 @@
   border-radius: 24px;
   border: none;
   background: linear-gradient(90deg, #8DE7ED, #2FCEC5);
-}
+} */
 
-.input{
+/* .input{
   font-size: 14px;
   width: 327px;
   height: 30px;
@@ -142,4 +147,4 @@
 
 .input::placeholder {
   font-family: 'Mulish', sans-serif;
-}
+} */
