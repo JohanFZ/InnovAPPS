@@ -37,12 +37,12 @@ class ventas extends React.Component {
     //creacion de data donde almacenaremos los listados
     state = {
         data: data,
+        modalActualizar: false,
+        abiertoMensaje: false,
         busqueda: '',
         productos: [],
-        abierto: false,
-        abiertoMensaje: false,
         form: {
-            id: '',
+            id: "",
             valorTotalVenta: '',
             identificador: '',
             cantidad: '',
@@ -52,17 +52,50 @@ class ventas extends React.Component {
             nombreCliente: '',
             encargadoVenta: '',
             estadoVenta: '',
+
         },
     };
 
-    abrirModal = (registro) => {
-        this.setState({ form: registro, abierto: !this.state.abierto })
-    }
+    mostrarModalActualizar = (dato) => {
+        this.setState({
+            form: dato,
+            modalActualizar: true,
+        });
+    };
 
-    abrirModalMensaje = () => {
-        this.setState({ abierto: false })
+    cerrarModalActualizar = () => {
+        this.setState({ modalActualizar: false });
+    };
+
+    editar = (dato) => {
+        var contador = 0;
+        var arreglo = this.state.data;
+        arreglo.map((registro) => {
+            if (dato.id == registro.id) {
+                arreglo[contador].valorTotalVenta = dato.valorTotalVenta;
+                arreglo[contador].identificador = dato.identificador;
+                arreglo[contador].cantidad = dato.cantidad;
+                arreglo[contador].precioUnitario = dato.precioUnitario;
+                arreglo[contador].fechaVenta = dato.fechaVenta;
+                arreglo[contador].documentoIdentificacion = dato.documentoIdentificacion;
+                arreglo[contador].nombreCliente = dato.nombreCliente;
+                arreglo[contador].encargadoVenta = dato.encargadoVenta;
+                arreglo[contador].estadoVenta = dato.estadoVenta;
+            }
+            contador++;
+        });
+        this.setState({ data: arreglo, modalActualizar: false });
         this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
-    }
+    };
+
+    handleChange = (e) => {
+        this.setState({
+            form: {
+                ...this.state.form,
+                [e.target.name]: e.target.value,
+            },
+        });
+    };
 
 
     //Va verificando el contenido del input
@@ -88,6 +121,7 @@ class ventas extends React.Component {
     }
 
     render() {
+
         return (
             <div>
 
@@ -95,7 +129,6 @@ class ventas extends React.Component {
                 <Home />
 
                 {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
-
                 <section class="home-section">
                     <h1>Listado de Ventas</h1>
                     <div className="content-info1">
@@ -112,7 +145,7 @@ class ventas extends React.Component {
                                 <tr>
                                     <th>#</th>
                                     <th>Valor Total</th>
-                                    <th>Identificador</th>
+                                    <th>Identificador de producto</th>
                                     <th>Cantidad</th>
                                     <th>Precio Unitario</th>
                                     <th>Fecha</th>
@@ -123,20 +156,23 @@ class ventas extends React.Component {
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
+
                             <tbody>
-                                {this.state.productos.map((elemento) => (
-                                    <tr>
-                                        <td>{elemento.id}</td>
-                                        <td>{elemento.valorTotalVenta}</td>
-                                        <td>{elemento.identificador}</td>
-                                        <td>{elemento.cantidad}</td>
-                                        <td>{elemento.precioUnitario}</td>
-                                        <td>{elemento.fechaVenta}</td>
-                                        <td>{elemento.documentoIdentificacion}</td>
-                                        <td>{elemento.nombreCliente}</td>
-                                        <td>{elemento.encargadoVenta}</td>
-                                        <td>{elemento.estadoVenta}</td>
-                                        <td><Button color="primary" onClick={() => this.abrirModal(elemento)}>Editar</Button></td>
+                                {this.state.productos.map((dato) => (
+                                    <tr key={dato.id}>
+                                        <td>{dato.id}</td>
+                                        <td>{dato.valorTotalVenta}</td>
+                                        <td>{dato.identificador}</td>
+                                        <td>{dato.cantidad}</td>
+                                        <td>{dato.precioUnitario}</td>
+                                        <td>{dato.fechaVenta}</td>
+                                        <td>{dato.documentoIdentificacion}</td>
+                                        <td>{dato.nombreCliente}</td>
+                                        <td>{dato.encargadoVenta}</td>
+                                        <td>{dato.estadoVenta}</td>
+                                        <td>
+                                            <Button color="primary" onClick={() => this.mostrarModalActualizar(dato)}>Editar</Button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -146,35 +182,55 @@ class ventas extends React.Component {
 
                 {/* Modal Ventana Actualizar */}
 
-                <Modal isOpen={this.state.abierto} className="md">
-                    <ModalHeader >Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
+                <Modal isOpen={this.state.modalActualizar} className="md">
+                    <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
+
                     <ModalBody>
-                        <Label>Valor total:</Label>
-                        <Input type="text" value={this.state.form.valorTotalVenta} />
+                        <Label> Valor Total de la Venta:</Label>
+                        <input className="form-control" name="valorTotalVenta" type="text" onChange={this.handleChange} value={this.state.form.valorTotalVenta} />
+
+                        <Label>Producto:</Label>
+                        <input className="form-control" name="identificador" type="text" onChange={this.handleChange} value={this.state.form.identificador} />
 
                         <Label>Cantidad:</Label>
-                        <Input type="text" value={this.state.form.identificador} />
+                        <input className="form-control" name="cantidad" type="text" onChange={this.handleChange} value={this.state.form.cantidad} />
 
-                        <Label>Estado:</Label>
-                        <Input type="text" value={this.state.form.cantidad} />
+                        <Label>Precio Unitario:</Label>
+                        <input className="form-control" name="precioUnitario" type="text" onChange={this.handleChange} value={this.state.form.precioUnitario} />
+
+                        <Label>Fecha de Venta:</Label>
+                        <input className="form-control" name="fechaVenta" type="text" onChange={this.handleChange} value={this.state.form.fechaVenta} />
+
+                        <Label>Documento de Identificacion:</Label>
+                        <input className="form-control" name="documentoIdentificacion" type="text" onChange={this.handleChange} value={this.state.form.documentoIdentificacion} />
+
+                        <Label>Nombre del Cliente:</Label>
+                        <input className="form-control" name="nombreCliente" type="text" onChange={this.handleChange} value={this.state.form.nombreCliente} />
+
+                        <Label>Encargado de la Venta:</Label>
+                        <input className="form-control" name="encargadoVenta" type="text" onChange={this.handleChange} value={this.state.form.encargadoVenta} />
+
+                        <Label>Estado de la Venta:</Label>
+                        <input className="form-control" name="estadoVenta" type="text" onChange={this.handleChange} value={this.state.form.estadoVenta} />
                     </ModalBody>
+
                     <ModalFooter>
-                        <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
-                        <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
+                        <Button color="primary" onClick={() => this.editar(this.state.form)}>Actualizar</Button>
+                        <Button color="danger" onClick={() => this.cerrarModalActualizar()}>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
 
                 {/* Modal Mensaje informativo */}
                 <Modal isOpen={this.state.abiertoMensaje}>
                     <ModalHeader>Mensaje Informativo</ModalHeader>
-                    <ModalBody>La venta se actualizo correctamente.</ModalBody>
+                    <ModalBody>El producto se actualizo correctamente.</ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
+                        <Button color="primary" onClick={this.editar}>Hecho</Button>
                     </ModalFooter>
                 </Modal>
 
             </div>
-        )
+        );
     }
 }
 
