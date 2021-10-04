@@ -1,221 +1,181 @@
-import React from 'react';
-import './ventas.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, Button, container, Modal, ModalBody, ModalHeader, FormGroup, ModalFooter } from 'reactstrap';
-
-
-// creacion del array 
+import React, { useState } from 'react';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import './ventas.css'
+import Home from '../Home/home'
 
 const data = [
-  {
-    id: 1, valorTotalVenta: 3000, identificador: "producto", cantidad: 3, precioUnitario: 2000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Johan Forero", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 2, valorTotalVenta: 6000, identificador: "producto", cantidad: 1, precioUnitario: 3000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Jennifer Paez", encargadoVenta: "Alvaro Leon",
-    estadoVenta: "Cancelada"
-  },
-  {
-    id: 3, valorTotalVenta: 10000, identificador: "producto", cantidad: 7, precioUnitario: 5000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Cristian Becerra", encargadoVenta: "Nicolas Herrera",
-    estadoVenta: "Entregada"
-  },
-  {
-    id: 4, valorTotalVenta: 1000, identificador: "producto", cantidad: 5, precioUnitario: 7000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Daniel Acuña", encargadoVenta: "Joseph Diaz",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 5, valorTotalVenta: 60000, identificador: "producto", cantidad: 6, precioUnitario: 3000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "lisseth ortiz", encargadoVenta: "Sandra Sanchez",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 6, valorTotalVenta: 4000, identificador: "producto", cantidad: 2, precioUnitario: 8000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Lizeth Muñoz", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 7, valorTotalVenta: 4000, identificador: "producto", cantidad: 2, precioUnitario: 8000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Lizeth Muñoz", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 8, valorTotalVenta: 4000, identificador: "producto", cantidad: 2, precioUnitario: 8000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Lizeth Muñoz", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 9, valorTotalVenta: 4000, identificador: "producto", cantidad: 2, precioUnitario: 8000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Lizeth Muñoz", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
-  {
-    id: 10, valorTotalVenta: 4000, identificador: "producto", cantidad: 2, precioUnitario: 8000,
-    fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Lizeth Muñoz", encargadoVenta: "Johan Reyes",
-    estadoVenta: "En proceso"
-  },
+    {
+        id: 1, valorTotalVenta: 3000, identificador: "Servicios legales tributarios", cantidad: 3, precioUnitario: 2000,
+        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Johan Forero", encargadoVenta: "Johan Reyes",
+        estadoVenta: "En proceso"
+    },
+    {
+        id: 2, valorTotalVenta: 6000, identificador: "Procesos de pertenencia", cantidad: 1, precioUnitario: 3000,
+        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Jennifer Paez", encargadoVenta: "Alvaro Leon",
+        estadoVenta: "Cancelada"
+    },
+    {
+        id: 3, valorTotalVenta: 10000, identificador: "Servidumbres", cantidad: 7, precioUnitario: 5000,
+        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Cristian Becerra", encargadoVenta: "Nicolas Herrera",
+        estadoVenta: "Entregada"
+    },
+    {
+        id: 4, valorTotalVenta: 1000, identificador: "procesos sancionatorios", cantidad: 5, precioUnitario: 7000,
+        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Daniel Acuña", encargadoVenta: "Joseph Diaz",
+        estadoVenta: "En proceso"
+    },
+    {
+        id: 5, valorTotalVenta: 60000, identificador: "Declaratoria de utilidad publica", cantidad: 6, precioUnitario: 3000,
+        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "lisseth ortiz", encargadoVenta: "Sandra Sanchez",
+        estadoVenta: "En proceso"
+    },
 ];
 
 class ventas extends React.Component {
 
-  //creacion de data donde almacenaremos los listados
-  state = {
-    data: data,
-    form:{
-      id: '',
-      valorTotalVenta: '',
-      identificador: '',
-      cantidad: '',
-      precioUnitario: '',     
-      fechaVenta:'',
-      documentoIdentificacion: '',
-      nombreCliente: '',
-      encargadoVenta: '',
-      estadoVenta: ''
-    },
-    modalEditar: false,
-  };
+    //creacion de data donde almacenaremos los listados
+    state = {
+        data: data,
+        busqueda: '',
+        productos: [],
+        abierto: false,
+        abiertoMensaje: false,
+        form: {
+            id: '',
+            valorTotalVenta: '',
+            identificador: '',
+            cantidad: '',
+            precioUnitario: '',
+            fechaVenta: '',
+            documentoIdentificacion: '',
+            nombreCliente: '',
+            encargadoVenta: '',
+            estadoVenta: '',
+        },
+    };
 
-mostrarModalEditar=(registro)=>{
-  this.setState({modalEditar: true, form: registro});
-}
-
-ocultarModaEditar=()=>{
-  this.setState({modalEditar: false});
-}
-
-editar=(dato)=>{
-  var contador=0;
-  var lista=this.state.data;
-
-  lista.map((registro)=>{
-    if(dato.id==registro.id){
-      lista[contador].valorTotalVenta=dato.valorTotalVenta;
-      lista[contador].identificador=dato.identificador;
-      lista[contador].cantidad=dato.cantidad;
-      lista[contador].precioUnitario=dato.precioUnitario;
-      lista[contador].fechaVenta=dato.fechaVenta;
-      lista[contador].documentoIdentificacion=dato.documentoIdentificacion;
-      lista[contador].nombreCliente=dato.nombreCliente;
-      lista[contador].encargadoVenta=dato.encargadoVenta;
-      lista[contador].estadoVenta=dato.estadoVenta;
+    abrirModal = (registro) => {
+        this.setState({ form: registro, abierto: !this.state.abierto })
     }
-    contador++;
-  })
-  this.setState({data: lista});
-}
 
-  render() {
-    return (
-      <>
-        <container>
-          <Table>
-            <thead><tr><th>Identificador de venta</th>
-              <th>Valor total de la venta</th>
-              <th>Identificacion</th>
-              <th>Cantidad</th>
-              <th>Precio Unitario</th>
-              <th>Fecha de venta</th>
-              <th>Docuemnto de identificacion</th>
-              <th>Nombre del cliente</th>
-              <th>Encargado de la venta</th>
-              <th>Estado de la venta</th>
-              <th>Acciones</th></tr></thead>
-            <tbody>
-              {this.state.data.map((elemento) => (
-                <tr>
-                  <td>{elemento.id}</td>
-                  <td>{elemento.valorTotalVenta}</td>
-                  <td>{elemento.identificador}</td>
-                  <td>{elemento.cantidad}</td>
-                  <td>{elemento.precioUnitario}</td>
-                  <td>{elemento.fechaVenta}</td>
-                  <td>{elemento.documentoIdentificacion}</td>
-                  <td>{elemento.nombreCliente}</td>
-                  <td>{elemento.encargadoVenta}</td>
-                  <td>{elemento.estadoVenta}</td>
-                  <td><Button color="primary" onClick={()=>this.mostrarModalEditar(elemento)}>Editar</Button></td>
-                </tr>
-              ))}
+    abrirModalMensaje = () => {
+        this.setState({ abierto: false })
+        this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+    }
 
-            </tbody>
 
-          </Table>
+    //Va verificando el contenido del input
+    onChange = async e => {
+        e.persist();
+        await this.setState({ busqueda: e.target.value });
+        this.filtrarElementos();
+    }
 
-          <datalist id="productos"></datalist>
+    filtrarElementos = () => {
+        var search = data.filter(item => {
+            if (item.id.toString().includes(this.state.busqueda) ||
+                item.identificador.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)) {
+                return item;
+            }
+        });
+        this.setState({ productos: search });
+    }
 
-        </container>
+    //Ciclo de vida (Cuandos se renderiza el componente)
+    componentDidMount() {
+        this.setState({ productos: data })
+    }
 
-        <Modal isOpen={this.state.modalEditar}>
-          <ModalHeader>
+    render() {
+        return (
             <div>
-              <h3>Editar registro Registro</h3>
+
+                {/* Barra del Menu */}
+                <Home />
+
+                {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
+
+                <section class="home-section">
+                    <h1>Listado de Ventas</h1>
+                    <div className="content-info1">
+                        <div className="search">
+                            <InputGroup>
+                                <Input
+                                    placeholder="Buscar Productos por ID o Nombre"
+                                    value={this.state.busqueda}
+                                    onChange={this.onChange} />
+                            </InputGroup>
+                        </div>
+                        <Table striped className="table1">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Valor Total</th>
+                                    <th>Identificador</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Fecha</th>
+                                    <th>D. Identificacion</th>
+                                    <th>N Cliente</th>
+                                    <th>Encargado</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.productos.map((elemento) => (
+                                    <tr>
+                                        <td>{elemento.id}</td>
+                                        <td>{elemento.valorTotalVenta}</td>
+                                        <td>{elemento.identificador}</td>
+                                        <td>{elemento.cantidad}</td>
+                                        <td>{elemento.precioUnitario}</td>
+                                        <td>{elemento.fechaVenta}</td>
+                                        <td>{elemento.documentoIdentificacion}</td>
+                                        <td>{elemento.nombreCliente}</td>
+                                        <td>{elemento.encargadoVenta}</td>
+                                        <td>{elemento.estadoVenta}</td>
+                                        <td><Button color="primary" onClick={() => this.abrirModal(elemento)}>Editar</Button></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
+                </section>
+
+                {/* Modal Ventana Actualizar */}
+
+                <Modal isOpen={this.state.abierto} className="md">
+                    <ModalHeader >Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
+                    <ModalBody>
+                        <Label>Valor total:</Label>
+                        <Input type="text" value={this.state.form.valorTotalVenta} />
+
+                        <Label>Cantidad:</Label>
+                        <Input type="text" value={this.state.form.identificador} />
+
+                        <Label>Estado:</Label>
+                        <Input type="text" value={this.state.form.cantidad} />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
+                        <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
+                    </ModalFooter>
+                </Modal>
+
+                {/* Modal Mensaje informativo */}
+                <Modal isOpen={this.state.abiertoMensaje}>
+                    <ModalHeader>Mensaje Informativo</ModalHeader>
+                    <ModalBody>El producto se actualizo correctamente.</ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
+                    </ModalFooter>
+                </Modal>
+
             </div>
-          </ModalHeader>
-
-          <ModalBody>
-            <FormGroup>
-              <label>Identificador de la venta:</label>
-              <input className="form-control" readOnly type="number" value={this.state.form.id}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>valor total de la venta:</label>
-              <input className="form-control" name="valorTotalVenta" type="number" value={this.state.form.valorTotalVenta}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Identificador:</label>
-              <input className="form-control" name="identificador" type="text" value={this.state.form.identificador}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Cantidad:</label>
-              <input className="form-control" name="cantidad" type="number" value={this.state.form.cantidad}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Precio Unitario:</label>
-              <input className="form-control" name="precioUnitario" type="number" value={this.state.form.precioUnitario}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Fecha de venta:</label>
-              <input className="form-control" name="fechaVenta" type="date" value={this.state.form.fechaVenta}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Documento de identificacion:</label>
-              <input className="form-control" name="documentoIdentificacion" type="number" value={this.state.form.documentoIdentificacion}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Nombre del Cliente:</label>
-              <input className="form-control" name="nombreCliente" type="text" value={this.state.form.nombreCliente}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Encargado de la venta:</label>
-              <input className="form-control" name="encargadoVenta" type="text" value={this.state.form.encargadoVenta}/>
-            </FormGroup>
-
-            <FormGroup>
-              <label>Estado de la venta:</label>
-              <input className="form-control" name="estadoVenta" type="text" value={this.state.form.estadoVenta}/>
-            </FormGroup>
-          </ModalBody>
-          
-          <ModalFooter>
-            <Button color="primary" onClick={()=>this.editar(this.state.form)}>Editar</Button>
-            <Button color="danger" onClick={()=>this.ocultarModaEditar()}>Cancelar</Button>
-          </ModalFooter>
-        </Modal>
-      </>)
-
-  }
+        )
+    }
 }
 
 export default ventas;
