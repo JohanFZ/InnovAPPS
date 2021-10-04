@@ -1,0 +1,20 @@
+
+  
+  .md {
+    left: 100px;
+    top: 40px;
+  }
+
+.config-crearVenta{
+    overflow: hidden;
+}
+
+.form-crearVenta{
+    width: 80%;
+    padding-top: 5%;
+    margin: auto;
+}
+
+.boton-crearVenta{
+    margin-top:20px;
+}
