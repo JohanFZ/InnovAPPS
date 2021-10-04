@@ -223,7 +223,7 @@ class ventas extends React.Component {
                 {/* Modal Mensaje informativo */}
                 <Modal isOpen={this.state.abiertoMensaje}>
                     <ModalHeader>Mensaje Informativo</ModalHeader>
-                    <ModalBody>El producto se actualizo correctamente.</ModalBody>
+                    <ModalBody>La venta se actualizo correctamente.</ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.editar}>Hecho</Button>
                     </ModalFooter>
