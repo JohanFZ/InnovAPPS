@@ -55,7 +55,7 @@ render() {
       {/* Modal Mensaje informativo */}
       <Modal className="md" isOpen={this.state.abiertoMensaje}>
           <ModalHeader>Mensaje Informativo</ModalHeader>
-          <ModalBody>El producto se actualizo correctamente.</ModalBody>
+          <ModalBody>El producto se agrego correctamente.</ModalBody>
           <ModalFooter>
               <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
           </ModalFooter>
