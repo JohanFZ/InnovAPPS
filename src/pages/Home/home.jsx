@@ -43,7 +43,7 @@ export default function home() {
               <i class='bx bx-chevron-down arrow' ></i>
             </div>
             <ul className="sub-menu">
-              <li><a href="/vendedores">Crear Producto</a></li>
+              <li><a href="/crear_producto">Crear Producto</a></li>
               <li><a href="/lproductos">Listar y Actualizar Productos</a></li>
             </ul>
           </li>

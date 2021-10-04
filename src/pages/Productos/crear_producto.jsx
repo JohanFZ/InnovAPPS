@@ -1,8 +1,22 @@
 import React from 'react';
 import './components/formulario.css';
 import Home from '../Home/home';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
-export default function vendedores() {
+class crear_producto extends React.Component {
+
+  //creacion de data donde almacenaremos los listados
+  state = {
+    abiertoMensaje: false,
+  };
+
+
+  abrirModalMensaje = () =>{
+    this.setState({abiertoMensaje : !this.state.abiertoMensaje})
+  }
+
+render() {
+
 
   return (
 
@@ -10,7 +24,7 @@ export default function vendedores() {
       <Home/>
 
       <section class= "home-section">
-        <div >
+        <div className="container">
           <form className="formulario">
             <center><h1>Registro de Productos</h1></center>
             <br></br>
@@ -30,13 +44,25 @@ export default function vendedores() {
                 </div>
               </div>
               <div className="row">
-                <button type="submit">Ingresar producto</button>
+                <center><Button onClick={this.abrirModalMensaje}>Ingresar producto</Button></center>
               </div>
             </div>
           </form>
         </div>
       
       </section>
+      
+      {/* Modal Mensaje informativo */}
+      <Modal className="md" isOpen={this.state.abiertoMensaje}>
+          <ModalHeader>Mensaje Informativo</ModalHeader>
+          <ModalBody>El producto se agrego correctamente.</ModalBody>
+          <ModalFooter>
+              <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
+          </ModalFooter>
+      </Modal>
+
     </div>
   )
 }
+}
+export default crear_producto;

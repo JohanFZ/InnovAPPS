@@ -1,9 +1,11 @@
 .content-info1 {
-  display: inline-block;
-  position: relative;
-  width: 800px;
-}
+    display: inline-block;
+    position: relative;
+    width: 800px;
+  }
+  
+  .table1 {
+    left: -70px;
+  }
 
-.table1 {
-  left: -70px;
-}
+  
