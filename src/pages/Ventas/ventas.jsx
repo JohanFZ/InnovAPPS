@@ -1,8 +1,8 @@
-import React from 'react';
-import './ventas.css';
-import { Table, Button, container, Modal, ModalBody, ModalHeader, FormGroup, ModalFooter } from 'reactstrap';
-
-// creacion del array 
+import React, { useState } from 'react';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import './ventas.css'
+import Home from '../Home/home'
 
 const data = [
     {
@@ -37,9 +37,12 @@ class ventas extends React.Component {
     //creacion de data donde almacenaremos los listados
     state = {
         data: data,
-        modalEditar: false,
+        modalActualizar: false,
+        abiertoMensaje: false,
+        busqueda: '',
+        productos: [],
         form: {
-            id: '',
+            id: "",
             valorTotalVenta: '',
             identificador: '',
             cantidad: '',
@@ -49,19 +52,41 @@ class ventas extends React.Component {
             nombreCliente: '',
             encargadoVenta: '',
             estadoVenta: '',
+
         },
     };
 
-    // permite que se ejecute la interfaz del boton editar
-    mostrarModalEditar = (registro) => {
-        this.setState({ modalEditar: true, form: registro });
-    }
+    mostrarModalActualizar = (dato) => {
+        this.setState({
+            form: dato,
+            modalActualizar: true,
+        });
+    };
 
-    cerrarModalEditar = () => {
-        this.setState({ modalEditar: false });
-    }
+    cerrarModalActualizar = () => {
+        this.setState({ modalActualizar: false });
+    };
 
- 
+    editar = (dato) => {
+        var contador = 0;
+        var arreglo = this.state.data;
+        arreglo.map((registro) => {
+            if (dato.id == registro.id) {
+                arreglo[contador].valorTotalVenta = dato.valorTotalVenta;
+                arreglo[contador].identificador = dato.identificador;
+                arreglo[contador].cantidad = dato.cantidad;
+                arreglo[contador].precioUnitario = dato.precioUnitario;
+                arreglo[contador].fechaVenta = dato.fechaVenta;
+                arreglo[contador].documentoIdentificacion = dato.documentoIdentificacion;
+                arreglo[contador].nombreCliente = dato.nombreCliente;
+                arreglo[contador].encargadoVenta = dato.encargadoVenta;
+                arreglo[contador].estadoVenta = dato.estadoVenta;
+            }
+            contador++;
+        });
+        this.setState({ data: arreglo, modalActualizar: false });
+        this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+    };
 
     handleChange = (e) => {
         this.setState({
@@ -72,137 +97,140 @@ class ventas extends React.Component {
         });
     };
 
-  
+
+    //Va verificando el contenido del input
+    onChange = async e => {
+        e.persist();
+        await this.setState({ busqueda: e.target.value });
+        this.filtrarElementos();
+    }
+
+    filtrarElementos = () => {
+        var search = data.filter(item => {
+            if (item.id.toString().includes(this.state.busqueda) ||
+                item.identificador.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)) {
+                return item;
+            }
+        });
+        this.setState({ productos: search });
+    }
+
+    //Ciclo de vida (Cuandos se renderiza el componente)
+    componentDidMount() {
+        this.setState({ productos: data })
+    }
 
     render() {
+
         return (
-            <>
-                <container>
-                    <Table>
-                        <thead><tr><th>Identificador de venta</th>
-                            <th>Valor total de la venta</th>
-                            <th>Identificacion</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Fecha de venta</th>
-                            <th>Docuemnto de identificacion</th>
-                            <th>Nombre del cliente</th>
-                            <th>Encargado de la venta</th>
-                            <th>Estado de la venta</th>
-                            <th>Modificar</th></tr></thead>
-                        <tbody>
-                            {this.state.data.map((elemento) => (
-                                <tr>
-                                    <td>{elemento.id}</td>
-                                    <td>{elemento.valorTotalVenta}</td>
-                                    <td>{elemento.identificador}</td>
-                                    <td>{elemento.cantidad}</td>
-                                    <td>{elemento.precioUnitario}</td>
-                                    <td>{elemento.fechaVenta}</td>
-                                    <td>{elemento.documentoIdentificacion}</td>
-                                    <td>{elemento.nombreCliente}</td>
-                                    <td>{elemento.encargadoVenta}</td>
-                                    <td>{elemento.estadoVenta}</td>
-                                    <td><Button color="primary" onClick={() => this.mostrarModalEditar(elemento)}>Editar</Button></td>
-                                </tr>
-                            ))}
+            <div>
 
-                        </tbody>
+                {/* Barra del Menu */}
+                <Home />
 
-                    </Table>
-
-                    <datalist id="productos"></datalist>
-
-                </container>
-
-                <Modal isOpen={this.state.modalEditar}>
-                    <ModalHeader>
-                        <div>
-                            <h3>Editar Registro</h3>
+                {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
+                <section class="home-section">
+                    <h1>Listado de Ventas</h1>
+                    <div className="content-info1">
+                        <div className="search">
+                            <InputGroup>
+                                <Input
+                                    placeholder="Buscar Productos por ID o Nombre"
+                                    value={this.state.busqueda}
+                                    onChange={this.onChange} />
+                            </InputGroup>
                         </div>
-                    </ModalHeader>
+                        <Table striped className="table1">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Valor Total</th>
+                                    <th>Identificador de producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Fecha</th>
+                                    <th>D. Identificacion</th>
+                                    <th>N Cliente</th>
+                                    <th>Encargado</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {this.state.productos.map((dato) => (
+                                    <tr key={dato.id}>
+                                        <td>{dato.id}</td>
+                                        <td>{dato.valorTotalVenta}</td>
+                                        <td>{dato.identificador}</td>
+                                        <td>{dato.cantidad}</td>
+                                        <td>{dato.precioUnitario}</td>
+                                        <td>{dato.fechaVenta}</td>
+                                        <td>{dato.documentoIdentificacion}</td>
+                                        <td>{dato.nombreCliente}</td>
+                                        <td>{dato.encargadoVenta}</td>
+                                        <td>{dato.estadoVenta}</td>
+                                        <td>
+                                            <Button color="primary" onClick={() => this.mostrarModalActualizar(dato)}>Editar</Button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
+                </section>
+
+                {/* Modal Ventana Actualizar */}
+
+                <Modal isOpen={this.state.modalActualizar} className="md">
+                    <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
 
                     <ModalBody>
-                        <FormGroup>
-                            <label>Identificador de la venta:</label>
-                            <input className="form-control" readOnly type="number"/>
-                        </FormGroup>
+                        <Label> Valor Total de la Venta:</Label>
+                        <input className="form-control" name="valorTotalVenta" type="text" onChange={this.handleChange} value={this.state.form.valorTotalVenta} />
 
-                        <FormGroup>
-                            <label>valor total de la venta:</label>
-                            <input className="form-control" name="valorTotalVenta" type="number"/>
-                        </FormGroup>
+                        <Label>Producto:</Label>
+                        <input className="form-control" name="identificador" type="text" onChange={this.handleChange} value={this.state.form.identificador} />
 
-                        <FormGroup>
-                            <label>Identificador:</label>
-                            <select name="producto">
-                                <option value="producto1">Servicios legales comerciales</option>
-                                <option value="producto2">Servicios legales tributarios</option>
-                                <option value="producto3">Procesos de pertenencia</option>
-                                <option value="producto4">Sucesiones</option>
-                                <option value="producto5">procesos divisorios</option>
-                                <option value="producto6">Servidumbres</option>
-                                <option value="producto7">Expropiaciones judiciales</option>
-                                <option value="producto8">procesos sancionatorios</option>
-                                <option value="producto9">Expropiaciones administrativas</option>
-                                <option value="producto10">Declaratoria de utilidad publica</option>
-                            </select>
-                        </FormGroup>
+                        <Label>Cantidad:</Label>
+                        <input className="form-control" name="cantidad" type="text" onChange={this.handleChange} value={this.state.form.cantidad} />
 
-                        <FormGroup>
-                            <label>Cantidad:</label>
-                            <input className="form-control" name="cantidad" type="number"/>
-                        </FormGroup>
+                        <Label>Precio Unitario:</Label>
+                        <input className="form-control" name="precioUnitario" type="text" onChange={this.handleChange} value={this.state.form.precioUnitario} />
 
-                        <FormGroup>
-                            <label>Precio Unitario:</label>
-                            <input className="form-control" name="precioUnitario" type="number" />
-                        </FormGroup>
+                        <Label>Fecha de Venta:</Label>
+                        <input className="form-control" name="fechaVenta" type="text" onChange={this.handleChange} value={this.state.form.fechaVenta} />
 
-                        <FormGroup>
-                            <label>Fecha de venta:</label>
-                            <input className="form-control" name="fechaVenta" type="date" />
-                        </FormGroup>
+                        <Label>Documento de Identificacion:</Label>
+                        <input className="form-control" name="documentoIdentificacion" type="text" onChange={this.handleChange} value={this.state.form.documentoIdentificacion} />
 
-                        <FormGroup>
-                            <label>Documento de identificacion:</label>
-                            <input className="form-control" name="documentoIdentificacion" type="number" />
-                        </FormGroup>
+                        <Label>Nombre del Cliente:</Label>
+                        <input className="form-control" name="nombreCliente" type="text" onChange={this.handleChange} value={this.state.form.nombreCliente} />
 
-                        <FormGroup>
-                            <label>Nombre del Cliente:</label>
-                            <input className="form-control" name="nombreCliente" type="text" />
-                        </FormGroup>
+                        <Label>Encargado de la Venta:</Label>
+                        <input className="form-control" name="encargadoVenta" type="text" onChange={this.handleChange} value={this.state.form.encargadoVenta} />
 
-                        <FormGroup>
-                            <label>Encargado de la venta:</label>
-                            <select name="EncargadoVenta">
-                                <option value="Encargado1">Johan Reyes</option>
-                                <option value="Encargado2">Alvaro León</option>
-                                <option value="Encargado3">Nicolas Herrera</option>
-                                <option value="Encargado4">Joseph Diaz</option>
-                                <option value="Encargado5">Sandra Sanchez</option>
-                            </select>
-                        </FormGroup>
-
-                        <FormGroup>
-                            <label>Estado de la venta:</label>
-                            <select name="EstadoVenta">
-                                <option value="EstadoVenta1">En proceso</option>
-                                <option value="EstadoVenta2">Cancelada</option>
-                                <option value="EstadoVenta3">Entregada</option>
-                            </select>
-                        </FormGroup>
+                        <Label>Estado de la Venta:</Label>
+                        <input className="form-control" name="estadoVenta" type="text" onChange={this.handleChange} value={this.state.form.estadoVenta} />
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button>Guardar</Button>
-                        {" "}
-                        <Button>Cancelar</Button>
+                        <Button color="primary" onClick={() => this.editar(this.state.form)}>Actualizar</Button>
+                        <Button color="danger" onClick={() => this.cerrarModalActualizar()}>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
-            </>)
 
+                {/* Modal Mensaje informativo */}
+                <Modal isOpen={this.state.abiertoMensaje}>
+                    <ModalHeader>Mensaje Informativo</ModalHeader>
+                    <ModalBody>El producto se actualizo correctamente.</ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.editar}>Hecho</Button>
+                    </ModalFooter>
+                </Modal>
+
+            </div>
+        );
     }
 }
 
