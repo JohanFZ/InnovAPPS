@@ -6,6 +6,7 @@ import Home from './pages/Home/home';
 import Vendedores from './pages/Vendedores/vendedores';
 import listarProductos from './pages/Productos/productos';
 import Usuarios from './pages/Usuarios/usuarios';
+import CrearVenta from './pages/Ventas/crearVenta';
 
 
 export function App(){
@@ -13,6 +14,7 @@ export function App(){
     <BrowserRouter>
     <Route exact path="/lproductos" component={listarProductos} />
     <Route exact path="/usuarios" component = {Usuarios} />
+    <Route exact path="/crearVenta" component = {CrearVenta} />
     <Route exact path="/ventas" component={Ventas} />
     <Route exact path="/" component={Login} />
     <Route exact path="/home" component={Home} />
