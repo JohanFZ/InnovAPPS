@@ -90,7 +90,7 @@ render() {
       {/* */} 
 
       {/* Modal Mensaje informativo */}
-      <Modal isOpen={this.state.abiertoMensaje}>
+      <Modal className= "md" isOpen={this.state.abiertoMensaje}>
         <ModalHeader>Mensaje Informativo</ModalHeader>
         <ModalBody>La venta se agrego correctamente.</ModalBody>
         <ModalFooter>
