@@ -14,17 +14,42 @@
   .table {
     background: #fff;
     position: relative;
-    top: 110px;
+    top: 150px;
   }
 
   .search {
+    text-align: center;
+    justify-content: center;
+    vertical-align: middle;
+    align-items: center;
     position: relative;
-    top: 40px;
+    top: 30px;
+    width: 100%;
+  }
+
+  .buscar {
+    height: 40px;
   }
 
   .md {
     left: 100px;
     top: 40px;
+  }
+
+  .buttongp {
+    width: 200px;
+  }
+
+  .dropdownmenu {
+    width: 200px;
+  }
+
+  .modalact {
+    padding: 20px;
+  }
+
+  .label {
+    padding: 5px;
   }
 
 

@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label} from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './usuarios.css'
 import Home from '../Home/home'
-import { ListUsers, ListUsersForEmail} from '../../api';
+import { ListUsers, ListUsersForEmail, ListUsersForID } from '../../api';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
@@ -21,143 +21,179 @@ class usuarios extends React.Component {
     abiertoMensaje: false,
     form: {
       id: '',
-      Nombre: '',
-      Rol: '',
-      Estado: '',
+      email: '',
+      rol: '',
+      estado: '',
     },
-    users: []
+    users: [],
+    value: '',
+    valueRol: ''
   };
 
-  abrirModal = (registro)=>{
-    this.setState({ form: registro, abierto: !this.state.abierto})
+  handleChange = (event) => {
+    this.setState({ value: event.target.value });
+  };
+
+  handleChangeRol = (event) => {
+    this.setState({ valueRol: event.target.value });
+  };
+
+
+  abrirModal = (registro) => {
+    this.setState({ form: registro, abierto: !this.state.abierto });
+    this.setState({ value: registro.estado });
+    this.setState({ valueRol: registro.rol });
   }
 
   abrirButton = () => {
     alert('Hola');
   }
 
-  abrirModalMensaje = () =>{
-    this.setState({abierto: false})
-    this.setState({abiertoMensaje : !this.state.abiertoMensaje})
+  abrirModalMensaje = () => {
+    this.setState({ abierto: false })
+    this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
   }
 
 
   //Va verificando el contenido del input
-  onChange = async e =>{
+  onChange = async e => {
     e.persist();
-    await this.setState({busqueda: e.target.value});
+    await this.setState({ busqueda: e.target.value });
+    if(this.state.busqueda.length === 0){
+      this.getUser();
+    }
   }
 
-  filtrarElementosporEmail = async()=>{
+  filtrarElementosporEmail = async () => {
     const dataU = await ListUsersForEmail(this.state.busqueda);
-    if(dataU.docs.length === 0){
+    if (dataU.docs.length === 0) {
       this.getUser();
-    }else{
-      this.setState({users: dataU.docs});
+    } else {
+      this.setState({ users: dataU.docs });
+    }
+  }
+
+  filtrarElementosporId = async () => {
+    const dataU = await ListUsersForID(this.state.busqueda);
+    if (dataU.docs.length === 0) {
+      this.getUser();
+    } else {
+      this.setState({ users: dataU.docs });
     }
   }
 
   getUser = async () => {
     const user = await ListUsers();
-    this.setState({users: user.docs});
+    this.setState({ users: user.docs });
   }
 
   //Ciclo de vida (Cuandos se renderiza el componente)
-  componentDidMount(){
+  componentDidMount() {
     this.getUser();
   }
 
 
 
-render() {
-  return (
-    <div>
+  render() {
+    return (
+      <div>
 
-      {/* Barra del Menu */}
-      <Home />
+        {/* Barra del Menu */}
+        <Home />
 
-    {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
+        {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
+        <section class="home-section">
+          <h1 class="titulo">Listado de Usuarios</h1>
+          <div className="content-info">
+            <div className="search">
+              <InputGroup>
+                <Input
+                  className="buscar"
+                  placeholder="Buscar Usuarios por ID o Nombre"
+                  value={this.state.busqueda}
+                  onChange={this.onChange} />
 
-      <section class="home-section">
+                <UncontrolledButtonDropdown>
+                  <DropdownToggle caret color="primary" className="buttongp">
+                    Opciones
+                  </DropdownToggle>
+                  <DropdownMenu className="dropdownmenu">
+                    <DropdownItem header>Filtros</DropdownItem>
+                    <DropdownItem onClick={this.filtrarElementosporId}>Id</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem onClick={this.filtrarElementosporEmail}>Email</DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledButtonDropdown>
+              </InputGroup>
+            </div>
+            <Table striped className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.users.map(elemento => (
+                  <tr>
+                    <td>{elemento.data().id}</td>
+                    <td>{elemento.data().email}</td>
+                    <td>{elemento.data().rol}</td>
+                    <td>{elemento.data().estado}</td>
+                    <td><Button color="primary" onClick={() => this.abrirModal(elemento.data())}>Editar</Button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </section>
 
-                <h1 class = "titulo">Listado de Usuarios</h1>
-                <div className="content-info">
-                    <div className="search">
-                        <InputGroup>
-                            <Input
-                            placeholder="Buscar Usuarios por ID o Nombre"
-                            value={this.state.busqueda}
-                            onChange={this.onChange}/>
-                        </InputGroup>
-            <UncontrolledButtonDropdown>
-              <DropdownToggle caret>
-                Opciones
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem header>Header</DropdownItem>
-                <DropdownItem onClick={this.filtrarElementosporEmail}>Id</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem onClick={this.filtrarElementosporEmail}>Email</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledButtonDropdown>
-                    </div>
-                    <Table striped className="table">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Rol</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.users.map( elemento => (
-                            <tr>
-                                <td>{elemento.data().id}</td>
-                                <td>{elemento.data().email}</td>
-                                <td>{elemento.data().rol}</td>
-                                <td>{elemento.data().estado}</td>
-                                <td><Button color="primary" onClick={()=> this.abrirModal(elemento.data())}>Editar</Button></td>
-                            </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
-      </section>
+        {/* Modal Ventana Actualizar */}
 
-      {/* Modal Ventana Actualizar */}
+        <Modal isOpen={this.state.abierto} className="md">
+          <ModalHeader >Editar Usuario</ModalHeader>
+          <ModalBody className="modalact">
+            <Label className="label">ID:</Label>
+            <Input type="text" disabled value={this.state.form.id} />
 
-      <Modal isOpen={this.state.abierto} className="md">
-        <ModalHeader >Editar Usuario</ModalHeader>
-        <ModalBody>
-          <Label>Nombre:</Label>
-          <Input type="text" value={this.state.users.id}/>
+            <Label className="label">Email:</Label>
+            <Input type="text" disabled value={this.state.form.email} />
 
-          <Label>Rol:</Label>
-          <Input type="text" value={this.state.users.email}/>
+            <Label className="label">Rol:</Label>
+            <Input type="select" onChange={this.handleChangeRol} value={this.state.valueRol}>
+              <option>Pendiente</option>
+              <option>Administrador</option>
+              <option>Vendedor</option>
+            </Input>
 
-          <Label>Estado:</Label>
-          <Input type="text" value={this.state.form.Estado}/>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
-          <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
-        </ModalFooter>
-      </Modal>
+            <Label className="label">Estado:</Label>
+            <Input type="select" onChange={this.handleChange} value={this.state.value}>
+              <option>Pendiente</option>
+              <option>Autorizado</option>
+              <option>No Autorizado</option>
+            </Input>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
+            <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
+          </ModalFooter>
+        </Modal>
 
-      {/* Modal Mensaje informativo */}
-      <Modal isOpen={this.state.abiertoMensaje}>
-        <ModalHeader>Mensaje Informativo</ModalHeader>
-        <ModalBody>El usuario se actualizo correctamente.</ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
-        </ModalFooter>
-      </Modal>
+        {/* Modal Mensaje informativo */}
+        <Modal isOpen={this.state.abiertoMensaje}>
+          <ModalHeader>Mensaje Informativo</ModalHeader>
+          <ModalBody>El usuario se actualizo correctamente.</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
+          </ModalFooter>
+        </Modal>
 
-    </div>
-  )
-}
+      </div>
+    )
+  }
 }
 
 export default usuarios; //este es para poder nombrarlo en el router
