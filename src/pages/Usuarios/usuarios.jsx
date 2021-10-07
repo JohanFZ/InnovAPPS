@@ -1,34 +1,39 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './usuarios.css'
 import Home from '../Home/home'
-
-const data = [
-  { id: "jforero", Nombre: "Johan Forero", Rol: "administrador", Estado: "autorizado"},
-  { id: "jdela", Nombre: "Juan De La Torre", Rol: "vendedor", Estado: "autorizado"},
-     
-];
-
+import { ListUsers, ListUsersForEmail} from '../../api';
+import {
+  UncontrolledButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
+} from 'reactstrap';
 class usuarios extends React.Component {
 
   //creacion de data donde almacenaremos los listados
   state = {
-    data: data,
     busqueda: '',
     productos: [],
     abierto: false,
+    st: false,
     abiertoMensaje: false,
     form: {
       id: '',
       Nombre: '',
       Rol: '',
       Estado: '',
-    }
+    },
+    users: []
   };
 
   abrirModal = (registro)=>{
     this.setState({ form: registro, abierto: !this.state.abierto})
+  }
+
+  abrirButton = () => {
+    alert('Hola');
   }
 
   abrirModalMensaje = () =>{
@@ -41,23 +46,28 @@ class usuarios extends React.Component {
   onChange = async e =>{
     e.persist();
     await this.setState({busqueda: e.target.value});
-    this.filtrarElementos();
   }
 
-  filtrarElementos=()=>{
-    var search = data.filter(item=>{
-      if (item.id.toString().includes(this.state.busqueda) ||
-      item.Descripcion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)){
-        return item;
-      }
-    });
-    this.setState({productos: search});
+  filtrarElementosporEmail = async()=>{
+    const dataU = await ListUsersForEmail(this.state.busqueda);
+    if(dataU.docs.length === 0){
+      this.getUser();
+    }else{
+      this.setState({users: dataU.docs});
+    }
+  }
+
+  getUser = async () => {
+    const user = await ListUsers();
+    this.setState({users: user.docs});
   }
 
   //Ciclo de vida (Cuandos se renderiza el componente)
   componentDidMount(){
-    this.setState({productos: data})
+    this.getUser();
   }
+
+
 
 render() {
   return (
@@ -67,9 +77,9 @@ render() {
       <Home />
 
     {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
-        
-      <section class="home-section"> 
-          
+
+      <section class="home-section">
+
                 <h1 class = "titulo">Listado de Usuarios</h1>
                 <div className="content-info">
                     <div className="search">
@@ -79,44 +89,53 @@ render() {
                             value={this.state.busqueda}
                             onChange={this.onChange}/>
                         </InputGroup>
+            <UncontrolledButtonDropdown>
+              <DropdownToggle caret>
+                Opciones
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem header>Header</DropdownItem>
+                <DropdownItem onClick={this.filtrarElementosporEmail}>Id</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={this.filtrarElementosporEmail}>Email</DropdownItem>
+              </DropdownMenu>
+            </UncontrolledButtonDropdown>
                     </div>
                     <Table striped className="table">
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
+                            <th>Email</th>
                             <th>Rol</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
-                            {this.state.productos.map((elemento) => (
+                            {this.state.users.map( elemento => (
                             <tr>
-                                <td>{elemento.id}</td>
-                                <td>{elemento.Nombre}</td>
-                                <td>{elemento.Rol}</td>
-                                <td>{elemento.Estado}</td>
-                                <td><Button color="primary" onClick={()=> this.abrirModal(elemento)}>Editar</Button></td>
+                                <td>{elemento.data().id}</td>
+                                <td>{elemento.data().email}</td>
+                                <td>{elemento.data().rol}</td>
+                                <td>{elemento.data().estado}</td>
+                                <td><Button color="primary" onClick={()=> this.abrirModal(elemento.data())}>Editar</Button></td>
                             </tr>
                             ))}
                         </tbody>
                     </Table>
                 </div>
-               
-        
       </section>
 
       {/* Modal Ventana Actualizar */}
 
       <Modal isOpen={this.state.abierto} className="md">
-        <ModalHeader >Editar Producto <b>#{this.state.form.id}</b></ModalHeader>
+        <ModalHeader >Editar Usuario</ModalHeader>
         <ModalBody>
           <Label>Nombre:</Label>
-          <Input type="text" value={this.state.form.Nombre}/>
+          <Input type="text" value={this.state.users.id}/>
 
           <Label>Rol:</Label>
-          <Input type="text" value={this.state.form.Rol}/>
+          <Input type="text" value={this.state.users.email}/>
 
           <Label>Estado:</Label>
           <Input type="text" value={this.state.form.Estado}/>
@@ -130,7 +149,7 @@ render() {
       {/* Modal Mensaje informativo */}
       <Modal isOpen={this.state.abiertoMensaje}>
         <ModalHeader>Mensaje Informativo</ModalHeader>
-        <ModalBody>El producto se actualizo correctamente.</ModalBody>
+        <ModalBody>El usuario se actualizo correctamente.</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.abrirModalMensaje}>Hecho</Button>
         </ModalFooter>
@@ -141,4 +160,4 @@ render() {
 }
 }
 
-export default usuarios; //este es para poder nombrarlo en el router 
+export default usuarios; //este es para poder nombrarlo en el router

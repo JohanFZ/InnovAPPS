@@ -2,30 +2,29 @@
     padding: 20px;
     color: rgb(8, 8, 8);
   }
-  
+
   .content-info {
     display: inline-block;
     align-items: center;
     text-align: center;
     justify-content: center;
-    width: 750px;
+    width: 790px;
   }
-  
+
   .table {
     background: #fff;
     position: relative;
     top: 110px;
   }
-  
+
   .search {
     position: relative;
     top: 40px;
   }
-  
+
   .md {
     left: 100px;
     top: 40px;
   }
 
 
-  
