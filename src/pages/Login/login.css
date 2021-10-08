@@ -148,3 +148,19 @@
 .input::placeholder {
   font-family: 'Mulish', sans-serif;
 } */
+
+button {
+  border: none;
+  background: #fff;
+}
+
+
+@media only screen and (max-width: 1280px){
+  .contenedor .image .title-h1 {
+    font-size: 28px;
+  }
+
+  .contenedor .image p{
+    font-size: 15px;
+  }
+}

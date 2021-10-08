@@ -4,7 +4,4 @@ import {App} from './app';
 import {FirebaseAppProvider} from 'reactfire'
 import firebaseConfig from './firebase-config'
 
-ReactDOM.render(
-  <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-    <App />
-  </FirebaseAppProvider>, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
