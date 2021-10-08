@@ -3,7 +3,7 @@ import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalF
 import 'bootstrap/dist/css/bootstrap.css';
 import './usuarios.css'
 import Home from '../Home/home'
-import { ListUsers, ListUsersForEmail, ListUsersForID } from '../../api';
+import { ListUsers, ListUsersForEmail, ListUsersForID, updateUser } from '../../api';
 import {
   UncontrolledButtonDropdown,
   DropdownToggle,
@@ -27,7 +27,8 @@ class usuarios extends React.Component {
     },
     users: [],
     value: '',
-    valueRol: ''
+    valueRol: '',
+    register: []
   };
 
   handleChange = (event) => {
@@ -39,18 +40,18 @@ class usuarios extends React.Component {
   };
 
 
-  abrirModal = (registro) => {
-    this.setState({ form: registro, abierto: !this.state.abierto });
+  abrirModal = (registro, registroBase) => {
+    this.setState({ form: registro, abierto: !this.state.abierto, register: registroBase });
     this.setState({ value: registro.estado });
     this.setState({ valueRol: registro.rol });
   }
 
-  abrirButton = () => {
-    alert('Hola');
+  cerrarModal = () => {
+    this.setState({ abierto: false });
   }
 
   abrirModalMensaje = () => {
-    this.setState({ abierto: false })
+    this.setState({ abierto: false });
     this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
   }
 
@@ -59,7 +60,7 @@ class usuarios extends React.Component {
   onChange = async e => {
     e.persist();
     await this.setState({ busqueda: e.target.value });
-    if(this.state.busqueda.length === 0){
+    if (this.state.busqueda.length === 0) {
       this.getUser();
     }
   }
@@ -92,7 +93,12 @@ class usuarios extends React.Component {
     this.getUser();
   }
 
-
+  upUser = async () => {
+    await updateUser(this.state.register.id, this.state.valueRol, this.state.value);
+    this.getUser();
+    this.setState({ abierto: false });
+    this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+  }
 
   render() {
     return (
@@ -143,7 +149,7 @@ class usuarios extends React.Component {
                     <td>{elemento.data().email}</td>
                     <td>{elemento.data().rol}</td>
                     <td>{elemento.data().estado}</td>
-                    <td><Button color="primary" onClick={() => this.abrirModal(elemento.data())}>Editar</Button></td>
+                    <td><Button color="primary" onClick={() => this.abrirModal(elemento.data(), elemento)}>Editar</Button></td>
                   </tr>
                 ))}
               </tbody>
@@ -177,8 +183,8 @@ class usuarios extends React.Component {
             </Input>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
-            <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
+            <Button onClick={this.upUser} color="primary">Actualizar</Button>{' '}
+            <Button onClick={this.cerrarModal} color="secondary">Cancelar</Button>
           </ModalFooter>
         </Modal>
 
