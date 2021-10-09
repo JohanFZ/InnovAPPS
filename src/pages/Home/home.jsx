@@ -1,10 +1,9 @@
 import React from 'react'
 import './home.css'
-import Logo from '../../assets/img/logo.png';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase, { db } from '../../firebase-config';
-import { saveUser, ListUser} from '../../api';
-import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { saveUser, ListUser } from '../../api';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 class home extends React.Component {
@@ -12,14 +11,20 @@ class home extends React.Component {
   state = {
     isLogin: false,
     abiertoMensaje: false,
+    abiertoMensajeNoAuth: false,
     uid: '',
     nombre: '',
     email: '',
-    photo: ''
+    photo: '',
+    rol: ''
   }
 
   abrirModalMensaje = () => {
     this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+  }
+
+  abrirModalMensajeNoAutorizado = () => {
+    this.setState({ abiertoMensajeNoAuth: !this.state.abiertoMensaje })
   }
 
   componentDidMount = () => {
@@ -36,6 +41,7 @@ class home extends React.Component {
 
     this.getUser();
     this.getUserState();
+    this.getUserRol();
   }
 
   getUserState = async () => {
@@ -43,8 +49,24 @@ class home extends React.Component {
     const p = await ListUser(id);
     if (p.docs[0].data().estado === 'Pendiente') {
       this.abrirModalMensaje();
-    } else {
+    }
+    if (p.docs[0].data().estado === 'No Autorizado'){
+      this.abrirModalMensajeNoAutorizado();
+    }else {
       console.log('Tienes Acceso');
+    }
+  }
+
+  getUserRol = async () => {
+    var id = localStorage.getItem('uid');
+    const p = await ListUser(id);
+    this.setState({ rol: p.docs[0].data().rol });
+    if (p.docs[0].data().rol === 'Vendedor') {
+      document.getElementById('usuarios').style.display = "none";
+      document.getElementById('productos').style.display = "none";
+    }
+    if (p.docs[0].data().estado === 'Pendiente') {
+      this.abrirModalMensajeNoAutorizado();
     }
   }
 
@@ -68,7 +90,7 @@ class home extends React.Component {
   }
 
 
-  render () {
+  render() {
     return (
       <div>
         <div className="sidebar close">
@@ -85,11 +107,11 @@ class home extends React.Component {
             </li>
 
             <li>
-              <div className="iocn-links">
-              <a href="#">
+              <div className="iocn-links" id="ventas">
+                <a href="#">
                   <i class='bx bx-calculator' ></i>
-                <span className="link_name">Ventas</span>
-              </a>
+                  <span className="link_name">Ventas</span>
+                </a>
                 <i class='bx bx-chevron-down arrow' ></i>
               </div>
               <ul className="sub-menu">
@@ -99,11 +121,11 @@ class home extends React.Component {
             </li>
 
             <li>
-              <div className="iocn-links">
-              <a href="#">
-                <i class='bx bx-cart'></i>
-                <span className="link_name">Productos</span>
-              </a>
+              <div className="iocn-links" id="productos">
+                <a href="#">
+                  <i class='bx bx-cart'></i>
+                  <span className="link_name">Productos</span>
+                </a>
                 <i class='bx bx-chevron-down arrow' ></i>
               </div>
               <ul className="sub-menu">
@@ -113,7 +135,7 @@ class home extends React.Component {
             </li>
 
             <li>
-              <div className="iocn-links">
+              <div className="iocn-links" id="usuarios">
                 <a href="#">
                   <i class='bx bx-user' ></i>
                   <span className="link_name">Usuarios</span>
@@ -132,7 +154,7 @@ class home extends React.Component {
                 </div>
                 <div class="name-job">
                   <div class="profile_name">{this.state.nombre}</div>
-                  <div class="job">Admin</div>
+                  <div class="job">{this.state.rol}</div>
                 </div>
                 <i class='bx bx-log-out' onClick={this.signOut}></i>
               </div>
@@ -148,6 +170,11 @@ class home extends React.Component {
         <Modal isOpen={this.state.abiertoMensaje}>
           <ModalHeader>Mensaje Informativo</ModalHeader>
           <ModalBody>Su cuenta esta en estado pendiente, vuelva a intentarlo en unos minutos.</ModalBody>
+        </Modal>
+
+        <Modal isOpen={this.state.abiertoMensajeNoAuth}>
+          <ModalHeader>Mensaje Informativo</ModalHeader>
+          <ModalBody>Su cuenta no esta autorizada, para funcionar en el sistema.</ModalBody>
         </Modal>
       </div>
     )

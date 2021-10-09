@@ -54,5 +54,10 @@ export const ListUsersForID = async (id) => {
   return querySnapshot;
 }
 
+export const updateUser = async (id, rol, estado) => {
+
+  await updateDoc(doc(db, 'users', id), {rol, estado})
+}
+
 
 
