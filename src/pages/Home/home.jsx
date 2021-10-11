@@ -2,7 +2,7 @@ import React from 'react'
 import './home.css'
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase, { db } from '../../firebase-config';
-import { saveUser, ListUser } from '../../api';
+import { saveUser, ListUser, ListUsers } from '../../api';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -13,6 +13,7 @@ class home extends React.Component {
     isLogin: false,
     abiertoMensaje: false,
     abiertoMensajeNoAuth: false,
+    id: '',
     uid: '',
     nombre: '',
     email: '',
@@ -28,7 +29,9 @@ class home extends React.Component {
     this.setState({ abiertoMensajeNoAuth: !this.state.abiertoMensaje })
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
+    this.getIdUser();
+    this.getUser();
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
@@ -39,8 +42,6 @@ class home extends React.Component {
         console.log('Sesion No Iniciada');
       }
     });
-
-    this.getUser();
     this.getUserState();
     this.getUserRol();
   }
@@ -56,6 +57,13 @@ class home extends React.Component {
     }else {
       console.log('Tienes Acceso');
     }
+  }
+
+  getIdUser = async () => {
+    const ID = await ListUsers();
+    console.log(ID.docs.length);
+    this.setState({ id: ID.docs.length + 1 })
+
   }
 
   getUserRol = async () => {
@@ -77,7 +85,7 @@ class home extends React.Component {
     if (user.docs.length > 0) {
       console.log('Usuario ya existente');
     } else {
-      saveUser(this.state.uid, this.state.email, 'Pendiente', 'Pendiente');
+      saveUser(this.state.id, this.state.email, 'Pendiente', 'Pendiente');
     }
   }
 

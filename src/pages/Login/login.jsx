@@ -20,7 +20,7 @@ class Login extends React.Component {
         // The signed-in user info.
         const user = result.user;
 
-        localStorage.setItem('uid', user.uid);
+        localStorage.setItem('uid', user.email);
         // ...
       }).catch((error) => {
         console.log(error);

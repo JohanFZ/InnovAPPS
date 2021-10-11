@@ -13,7 +13,7 @@ export const saveUser = (id, email, rol, estado) => {
 export const ListUser = async (id) => {
   const UserRef = collection(db, "users");
 
-  const q = query(UserRef, where("id", "==", id));
+  const q = query(UserRef, where("email", "==", id));
 
   const querySnapshot = await getDocs(q);
 
@@ -65,7 +65,7 @@ export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
 
   addDoc(collection(db, 'Product'), { id, codigo, nombre, valorUnitario, estado });
 
-} 
+}
 
 
 //Metodo para listar todos los productos
