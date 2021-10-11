@@ -60,4 +60,18 @@ export const updateUser = async (id, rol, estado) => {
 }
 
 
+// Metodo para guardar producto
+export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
 
+  addDoc(collection(db, 'Product'), { id, codigo, nombre, valorUnitario, estado });
+
+} 
+
+
+//Metodo para listar todos los productos
+export const listproduct = async () => {
+
+  const result = await getDocs(query(collection(db, 'Product')));
+
+  return result;
+}
