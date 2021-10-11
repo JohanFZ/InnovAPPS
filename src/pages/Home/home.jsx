@@ -74,7 +74,7 @@ class home extends React.Component {
       document.getElementById('usuarios').style.display = "none";
       document.getElementById('productos').style.display = "none";
     }
-    if (p.docs[0].data().estado === 'Pendiente') {
+    if (p.docs[0].data().rol === 'Pendiente') {
       this.abrirModalMensajeNoAutorizado();
     }
   }
