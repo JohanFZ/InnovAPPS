@@ -106,3 +106,8 @@ export const ListProductsForID = async (id) => {
   console.log(querySnapshot.docs);
   return querySnapshot;
 }
+
+export const updateProducto = async (id, codigo, nombre, valorUnitario, estado) => {
+
+  await updateDoc(doc(db, 'Product', id), {codigo, nombre, valorUnitario, estado})
+}

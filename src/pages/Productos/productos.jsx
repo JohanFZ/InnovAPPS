@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label,UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import {getProducts,ListProductsForName,ListProductsForID} from '../../api';
+import {getProducts,ListProductsForName,ListProductsForID,updateProducto} from '../../api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './productos.css'
 import Home from '../Home/home'
@@ -36,12 +36,24 @@ class productos extends React.Component {
       Descripcion: '',
       ValorUnitario: '',
       Estado: '',
-    }
+    },
+    users: [],
+    value: '',
+    valueRol: '',
+    register: [],
+    nombre: '',
+    codigo: '',
+    valor: '',
+    estado: '',
   };
 
 
-  abrirModal = (registro)=>{
-    this.setState({ form: registro, abierto: !this.state.abierto})
+  abrirModal = (registro, registroBase) => {
+    this.setState({ form: registro, abierto: !this.state.abierto, register: registroBase });
+    this.setState({ codigo: registro.codigo });
+    this.setState({ nombre: registro.nombre });
+    this.setState({ valor: registro.valorUnitario });
+    this.setState({ estado: registro.estado });
   }
 
   abrirModalMensaje = () =>{
@@ -80,8 +92,30 @@ class productos extends React.Component {
     }
   }
 
+  handleChange = (event) => {
+    this.setState({ codigo: event.target.value });
+  };
+
+  handleChangenombre = (event) => {
+    this.setState({ nombre: event.target.value });
+  };
+
+  handleChangevalor = (event) => {
+    this.setState({ valor: event.target.value });
+  };
+
+  handleChangeestado = (event) => {
+    this.setState({ estado: event.target.value });
+  };
+
+  upProduct = async () => {
+    await updateProducto(this.state.register.id, this.state.codigo, this.state.nombre, this.state.valor, this.state.estado);
+    this.getProductList();
+    this.setState({ abierto: false });
+    this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+  }
+
  
-  
 
 render() {
   return (
@@ -133,7 +167,7 @@ render() {
                     <td>{elemento.data().nombre}</td>
                     <td>{elemento.data().valorUnitario}</td>
                     <td>{elemento.data().estado}</td>
-                    <td><Button color="primary" onClick={()=> this.abrirModal(elemento)}>Editar</Button></td>
+                    <td><Button color="primary" onClick={() => this.abrirModal(elemento.data(), elemento)}>Editar</Button></td>
                   </tr>
                 ))}
             </tbody>
@@ -144,19 +178,23 @@ render() {
       {/* Modal Ventana Actualizar */}
 
       <Modal isOpen={this.state.abierto} className="md">
-        <ModalHeader >Editar Producto <b>#{this.state.form.id}</b></ModalHeader>
+        <ModalHeader >Editar Producto</ModalHeader>
         <ModalBody>
+          <Label className="label">ID:</Label>
+          <Input type="text" disabled value={this.state.form.id} />
+          <Label className="label">Código:</Label>
+          <Input type="text" onChange={this.handleChange} value={this.state.codigo} />
           <Label>Nombre:</Label>
-          <Input type="text" value={this.state.form.Descripcion}/>
+          <Input type="text" onChange={this.handleChangenombre} value={this.state.nombre}/>
 
           <Label>Valor Unitario:</Label>
-          <Input type="text" value={this.state.form.ValorUnitario}/>
+          <Input type="text" onChange={this.handleChangevalor} value={this.state.valor}/>
 
           <Label>Estado:</Label>
-          <Input type="text" value={this.state.form.Estado}/>
+          <Input type="text" onChange={this.handleChangeestado} value={this.state.estado}/>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={this.abrirModalMensaje} color="primary">Actualizar</Button>{' '}
+          <Button onClick={this.upProduct} color="primary">Actualizar</Button>{' '}
           <Button onClick={this.abrirModal} color="secondary">Cancelar</Button>
         </ModalFooter>
       </Modal>
