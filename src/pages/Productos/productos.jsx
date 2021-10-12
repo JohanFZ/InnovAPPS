@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label} from 'reactstrap';
-import {getProducts} from '../../api';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label,UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {getProducts,ListProductsForName,ListProductsForID} from '../../api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './productos.css'
 import Home from '../Home/home'
@@ -13,14 +13,14 @@ import { getDocs } from '@firebase/firestore';
 class productos extends React.Component {
 
 
-  getUser = async () => {
-    const user = await getProducts();
-    this.setState({ data: user.docs });
+  getProductList = async () => {
+    const product = await getProducts();
+    this.setState({ data: product.docs });
   }
   
   //Ciclo de vida (Cuandos se renderiza el componente)
   componentDidMount(){
-    this.getUser();
+    this.getProductList();
   }
   
 
@@ -28,7 +28,6 @@ class productos extends React.Component {
   state = {
     data: [],
     busqueda: '',
-    productos: [],
     abierto: false,
     abiertoMensaje: false,
     form: {
@@ -51,20 +50,31 @@ class productos extends React.Component {
 
 
   //Va verificando el contenido del input
-  onChange = async e =>{
+  onChange = async e => {
     e.persist();
-    await this.setState({busqueda: e.target.value});
-    this.filtrarElementos();
+    await this.setState({ busqueda: e.target.value });
+    if (this.state.busqueda.length === 0) {
+      this.getProductList();
+    }
   }
 
-  filtrarElementos=()=>{
-    /*var search = data.filter(item=>{
-      if (item.id.toString().includes(this.state.busqueda) ||
-      item.Descripcion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)){
-        return item;
-      }
-    });
-    this.setState({productos: search});*/
+  filtrarElementosporNombre = async () => {
+  
+    const product = await ListProductsForName(this.state.busqueda);
+    if (product.docs.length === 0) {
+      this.getProductList();
+    } else {
+      this.setState({ data: product.docs });
+    }
+  }
+
+  filtrarElementosporId = async () => {
+    const product = await ListProductsForID(this.state.busqueda);
+    if (product.docs.length === 0) {
+      this.getProductList();
+    } else {
+      this.setState({ data: product.docs });
+    }
   }
 
  
@@ -88,12 +98,24 @@ render() {
               placeholder="Buscar Productos por ID o Nombre"
               value={this.state.busqueda}
               onChange={this.onChange}/>
+
+              <UncontrolledDropdown>
+                <DropdownToggle caret color= "primary">
+                  Opciones
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={this.filtrarElementosporId}>Filtro por Id</DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem onClick={this.filtrarElementosporNombre}>Filtro por Nombre</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </InputGroup>
           </div>
           <Table striped className="table">
             <thead>
               <tr>
                 <th>#</th>
+                <th>Codigo</th>
                 <th>Nombre</th>
                 <th>Valor Unitario</th>
                 <th>Estado</th>
@@ -106,6 +128,7 @@ render() {
                     <td>{elemento.data().id}</td>
                     <td>{elemento.data().codigo}</td>
                     <td>{elemento.data().nombre}</td>
+                    <td>{elemento.data().valorUnitario}</td>
                     <td>{elemento.data().estado}</td>
                     <td><Button color="primary" onClick={()=> this.abrirModal(elemento)}>Editar</Button></td>
                   </tr>
