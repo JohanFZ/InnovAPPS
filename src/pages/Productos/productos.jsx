@@ -1,27 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label} from 'reactstrap';
+import {getProducts} from '../../api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './productos.css'
 import Home from '../Home/home'
+import { getDocs } from '@firebase/firestore';
 
-const data = [
-  { id: 1, Descripcion: "Servicios legales Tributarios", ValorUnitario: 5200000, Estado: 'Disponible'},
-  { id: 2, Descripcion: "Sucesiones", ValorUnitario: 820000, Estado: 'No Disponible'},
-  { id: 3, Descripcion: "Procesos Divisorios", ValorUnitario: 1200000, Estado: 'Disponible'},
-  { id: 4, Descripcion: "Servidumbres", ValorUnitario: 750000, Estado: 'Disponible'},
-  { id: 5, Descripcion: "Expropiaciones Judiciales", ValorUnitario: 5000000, Estado: 'No Disponible'},
-  { id: 6, Descripcion: "Servicios Legales Comerciales", ValorUnitario: 8000000, Estado: 'No Disponible'},
-  { id: 7, Descripcion: "Procesos de Pertenencia", ValorUnitario: 4500000, Estado: 'No Disponible'},
-  { id: 8, Descripcion: "Procesos Sancionatorios", ValorUnitario: 3000000, Estado: 'No Disponible'},
-  { id: 9, Descripcion: "Declaratoria de Utilidad Publica", ValorUnitario: 1500000, Estado: 'No Disponible'},
-  { id: 10, Descripcion: "Procesos Judiciales", ValorUnitario: 2000000, Estado: 'No Disponible'},
-];
+
+
+
 
 class productos extends React.Component {
 
+
+  getUser = async () => {
+    const user = await getProducts();
+    this.setState({ data: user.docs });
+  }
+  
+  //Ciclo de vida (Cuandos se renderiza el componente)
+  componentDidMount(){
+    this.getUser();
+  }
+  
+
   //creacion de data donde almacenaremos los listados
   state = {
-    data: data,
+    data: [],
     busqueda: '',
     productos: [],
     abierto: false,
@@ -33,6 +38,7 @@ class productos extends React.Component {
       Estado: '',
     }
   };
+
 
   abrirModal = (registro)=>{
     this.setState({ form: registro, abierto: !this.state.abierto})
@@ -52,19 +58,17 @@ class productos extends React.Component {
   }
 
   filtrarElementos=()=>{
-    var search = data.filter(item=>{
+    /*var search = data.filter(item=>{
       if (item.id.toString().includes(this.state.busqueda) ||
       item.Descripcion.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)){
         return item;
       }
     });
-    this.setState({productos: search});
+    this.setState({productos: search});*/
   }
 
-  //Ciclo de vida (Cuandos se renderiza el componente)
-  componentDidMount(){
-    this.setState({productos: data})
-  }
+ 
+  
 
 render() {
   return (
@@ -97,12 +101,12 @@ render() {
               </tr>
             </thead>
             <tbody>
-                {this.state.productos.map((elemento) => (
+                {this.state.data.map((elemento) => (
                   <tr>
-                    <td>{elemento.id}</td>
-                    <td>{elemento.Descripcion}</td>
-                    <td>{elemento.ValorUnitario}</td>
-                    <td>{elemento.Estado}</td>
+                    <td>{elemento.data().id}</td>
+                    <td>{elemento.data().codigo}</td>
+                    <td>{elemento.data().nombre}</td>
+                    <td>{elemento.data().estado}</td>
                     <td><Button color="primary" onClick={()=> this.abrirModal(elemento)}>Editar</Button></td>
                   </tr>
                 ))}
