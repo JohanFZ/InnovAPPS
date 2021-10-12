@@ -15,6 +15,7 @@ class productos extends React.Component {
 
   getProductList = async () => {
     const product = await getProducts();
+    console.log()
     this.setState({ data: product.docs });
   }
   
@@ -59,7 +60,7 @@ class productos extends React.Component {
   }
 
   filtrarElementosporNombre = async () => {
-  
+    
     const product = await ListProductsForName(this.state.busqueda);
     if (product.docs.length === 0) {
       this.getProductList();
@@ -69,7 +70,9 @@ class productos extends React.Component {
   }
 
   filtrarElementosporId = async () => {
-    const product = await ListProductsForID(this.state.busqueda);
+    var x = this.state.busqueda;
+    x  = parseInt(x);
+    const product = await ListProductsForID(x);
     if (product.docs.length === 0) {
       this.getProductList();
     } else {

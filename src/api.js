@@ -46,7 +46,7 @@ export const ListUsersForID = async (id) => {
 
   const UserRef = collection(db, "users");
 
-  const q = query(UserRef, orderBy('id'), startAt(id), endAt(id + '\uf8ff'));
+  const q = query(UserRef, where("id", "==", id));
 
   const querySnapshot = await getDocs(q);
 
@@ -90,7 +90,7 @@ export const ListProductsForName = async (nombre) => {
   const q = query(UserRef, orderBy('nombre'), startAt(nombre), endAt(nombre + '\uf8ff'));
 
   const querySnapshot = await getDocs(q);
-  console.log(querySnapshot);
+  
   return querySnapshot;
 }
 
@@ -100,9 +100,9 @@ export const ListProductsForID = async (id) => {
 
   const UserRef = collection(db, "Product");
 
-  const q = query(UserRef, orderBy('id'), startAt(id), endAt(id + '\uf8ff'));
+  const q = query(UserRef, where("id", "==", id));
 
   const querySnapshot = await getDocs(q);
-
+  console.log(querySnapshot.docs);
   return querySnapshot;
 }
