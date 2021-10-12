@@ -8,13 +8,19 @@
     align-items: center;
     text-align: center;
     justify-content: center;
-    width: 790px;
+    width: 850px;
   }
 
   .table {
     background: #fff;
     position: relative;
+    font-size: 15px;
+    vertical-align: middle;
     top: 150px;
+  }
+
+  .table .row-rol, .table .row-id, .table .row-estado, .table .row-action {
+    width: 10px;
   }
 
   .search {

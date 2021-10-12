@@ -6,14 +6,13 @@ import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, 
 export const saveUser = (id, email, rol, estado) => {
 
   addDoc(collection(db, 'users'), { id, email, rol, estado });
-
 }
 
 //Metodo para listar un usuario por id
 export const ListUser = async (id) => {
   const UserRef = collection(db, "users");
 
-  const q = query(UserRef, where("id", "==", id));
+  const q = query(UserRef, where("email", "==", id));
 
   const querySnapshot = await getDocs(q);
 
@@ -62,7 +61,20 @@ export const updateUser = async (id, rol, estado) => {
 
 export const getProducts = async() => {
   const result = await getDocs(query(collection(db, 'Product')));
-  return result; 
+  return result;
+ }
+// Metodo para guardar producto
+export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
+
+  addDoc(collection(db, 'Product'), { id, codigo, nombre, valorUnitario, estado });
+
 }
 
 
+//Metodo para listar todos los productos
+export const listproduct = async () => {
+
+  const result = await getDocs(query(collection(db, 'Product')));
+
+  return result;
+}

@@ -2,9 +2,10 @@ import React from 'react'
 import './home.css'
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase, { db } from '../../firebase-config';
-import { saveUser, ListUser } from '../../api';
+import { saveUser, ListUser, ListUsers } from '../../api';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+
 
 class home extends React.Component {
 
@@ -12,6 +13,7 @@ class home extends React.Component {
     isLogin: false,
     abiertoMensaje: false,
     abiertoMensajeNoAuth: false,
+    id: '',
     uid: '',
     nombre: '',
     email: '',
@@ -28,6 +30,8 @@ class home extends React.Component {
   }
 
   componentDidMount = () => {
+    this.getUserState();
+    this.getUserRol();
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
@@ -38,10 +42,6 @@ class home extends React.Component {
         console.log('Sesion No Iniciada');
       }
     });
-
-    this.getUser();
-    this.getUserState();
-    this.getUserRol();
   }
 
   getUserState = async () => {
@@ -65,18 +65,8 @@ class home extends React.Component {
       document.getElementById('usuarios').style.display = "none";
       document.getElementById('productos').style.display = "none";
     }
-    if (p.docs[0].data().estado === 'Pendiente') {
+    if (p.docs[0].data().rol === 'Pendiente') {
       this.abrirModalMensajeNoAutorizado();
-    }
-  }
-
-  getUser = async () => {
-    var id = localStorage.getItem('uid');
-    const user = await ListUser(id);
-    if (user.docs.length > 0) {
-      console.log('Usuario ya existente');
-    } else {
-      saveUser(this.state.uid, this.state.email, 'Pendiente', 'Pendiente');
     }
   }
 
