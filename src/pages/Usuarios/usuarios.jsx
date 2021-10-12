@@ -76,7 +76,9 @@ class usuarios extends React.Component {
   }
 
   filtrarElementosporId = async () => {
-    const dataU = await ListUsersForID(this.state.busqueda);
+    var x = this.state.busqueda;
+    x  = parseInt(x);
+    const dataU = await ListUsersForID(x);
     if (dataU.docs.length === 0) {
       this.getUser();
     } else {
