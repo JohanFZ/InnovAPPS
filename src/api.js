@@ -59,6 +59,10 @@ export const updateUser = async (id, rol, estado) => {
 }
 
 
+export const getProducts = async() => {
+  const result = await getDocs(query(collection(db, 'Product')));
+  return result;
+ }
 // Metodo para guardar producto
 export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
 
