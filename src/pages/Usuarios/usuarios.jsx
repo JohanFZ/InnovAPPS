@@ -52,6 +52,7 @@ class usuarios extends React.Component {
 
   abrirModalMensaje = () => {
     this.setState({ abierto: false });
+    window.location.reload();
     this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
   }
 
@@ -135,11 +136,11 @@ class usuarios extends React.Component {
             <Table striped className="table">
               <thead>
                 <tr>
-                  <th>ID</th>
+                  <th className="row-id">ID</th>
                   <th>Email</th>
-                  <th>Rol</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
+                  <th className="row-rol">Rol</th>
+                  <th className="row-estado">Estado</th>
+                  <th className='row-action'>Acciones</th>
                 </tr>
               </thead>
               <tbody>

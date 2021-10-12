@@ -6,7 +6,6 @@ import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, 
 export const saveUser = (id, email, rol, estado) => {
 
   addDoc(collection(db, 'users'), { id, email, rol, estado });
-
 }
 
 //Metodo para listar un usuario por id

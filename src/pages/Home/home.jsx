@@ -29,9 +29,9 @@ class home extends React.Component {
     this.setState({ abiertoMensajeNoAuth: !this.state.abiertoMensaje })
   }
 
-  componentWillMount = () => {
-    this.getIdUser();
-    this.getUser();
+  componentDidMount = () => {
+    this.getUserState();
+    this.getUserRol();
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
@@ -42,8 +42,6 @@ class home extends React.Component {
         console.log('Sesion No Iniciada');
       }
     });
-    this.getUserState();
-    this.getUserRol();
   }
 
   getUserState = async () => {
@@ -59,13 +57,6 @@ class home extends React.Component {
     }
   }
 
-  getIdUser = async () => {
-    const ID = await ListUsers();
-    console.log(ID.docs.length);
-    this.setState({ id: ID.docs.length + 1 })
-
-  }
-
   getUserRol = async () => {
     var id = localStorage.getItem('uid');
     const p = await ListUser(id);
@@ -76,16 +67,6 @@ class home extends React.Component {
     }
     if (p.docs[0].data().rol === 'Pendiente') {
       this.abrirModalMensajeNoAutorizado();
-    }
-  }
-
-  getUser = async () => {
-    var id = localStorage.getItem('uid');
-    const user = await ListUser(id);
-    if (user.docs.length > 0) {
-      console.log('Usuario ya existente');
-    } else {
-      saveUser(this.state.id, this.state.email, 'Pendiente', 'Pendiente');
     }
   }
 
