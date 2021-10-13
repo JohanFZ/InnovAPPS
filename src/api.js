@@ -3,9 +3,9 @@ import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, 
 
 
 // Metodo para guardar usuario
-export const saveUser = (id, email, rol, estado) => {
+export const saveUser = (id, nombre, email, rol, estado) => {
 
-  addDoc(collection(db, 'users'), { id, email, rol, estado });
+  addDoc(collection(db, 'users'), { id, nombre, email, rol, estado });
 }
 
 //Metodo para listar un usuario por id
@@ -62,9 +62,13 @@ export const updateUser = async (id, rol, estado) => {
 
 
 export const getProducts = async() => {
+
   const result = await getDocs(query(collection(db, 'Product')));
+
   return result;
+
  }
+
 // Metodo para guardar producto
 export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
 
@@ -84,13 +88,13 @@ export const listproduct = async () => {
 //Metodo para realizar busqueda de productos por nombre
 
 export const ListProductsForName = async (nombre) => {
-  
+
   const UserRef = collection(db, "Product");
 
   const q = query(UserRef, orderBy('nombre'), startAt(nombre), endAt(nombre + '\uf8ff'));
 
   const querySnapshot = await getDocs(q);
-  
+
   return querySnapshot;
 }
 
@@ -110,4 +114,36 @@ export const ListProductsForID = async (id) => {
 export const updateProducto = async (id, codigo, nombre, valorUnitario, estado) => {
 
   await updateDoc(doc(db, 'Product', id), {codigo, nombre, valorUnitario, estado})
+}
+
+//Metodo para listar todos las ventas
+export const ListSales = async () => {
+
+  const result = await getDocs(query(collection(db, 'sales')));
+
+  return result;
+}
+
+//Metodo para realizar busqueda de productos por id
+export const ListProductsVendor= async () => {
+
+  const UserRef = collection(db, "users");
+
+  const q = query(UserRef, where("rol", "==", "Vendedor"));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
+}
+
+//Metodo para realizar busqueda de productos por id
+export const ListProductsCash = async (id) => {
+
+  const UserRef = collection(db, "Product");
+
+  const q = query(UserRef, where("nombre", "==", id));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
 }

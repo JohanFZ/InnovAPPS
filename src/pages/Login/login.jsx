@@ -72,7 +72,7 @@ class Login extends React.Component {
       console.log('Usuario ya existente');
       window.location.href = '/home';
     } else {
-      saveUser(this.state.id, this.state.email, 'Pendiente', 'Pendiente');
+      saveUser(this.state.id, this.state.nombre, this.state.email, 'Pendiente', 'Pendiente');
       this.setState({ estadoModal: !this.state.estadoModal })
     }
   }

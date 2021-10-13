@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Col, Row, Button, Form, FormGroup, Label, Input, Table } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './crearVenta.css'
 import Home from '../Home/home'
+import { ListSales, ListProductsVendor, getProducts, ListProductsCash } from '../../api';
 
 const data = [
   { id: "jforero", Nombre: "Johan Forero", Rol: "administrador", Estado: "autorizado" },
@@ -16,16 +17,68 @@ class crearVenta extends React.Component {
   //creacion de data donde almacenaremos los listados
   state = {
     abiertoMensaje: false,
+    id: '',
+    vendedores: [],
+    seleccionEncargado: '',
+    productos: [],
+    seleccionProducto: '',
+    cash: []
   };
 
+  handleChange = (event) => {
+    this.setState({ seleccionEncargado: event.target.value });
+  };
+
+  handleChangeProducto = (event) => {
+    this.setState({ seleccionProducto: event.target.value });
+  };
+
+  componentDidUpdate(){
+    this.getCash();
+  }
+
+  verificarDatos = () => {
+    console.log(this.state.seleccionEncargado);
+    this.getCash();
+  }
 
   abrirModalMensaje = () => {
     this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
   }
 
+  getIdSale = async () => {
+    const ID = await ListSales();
+    this.setState({ id: ID.docs.length + 1 })
+  }
+
+  getCash = async () => {
+    const ID = await ListProductsCash(this.state.seleccionProducto);
+    if (ID.docs.length > 0) {
+      this.setState({ cash: ID.docs[0].data() })
+    }else{
+      this.setState({ cash: 'No hay producto seleccionado' })
+    }
+  }
+
+  getVendedores = async () => {
+    const ID = await ListProductsVendor();
+    this.setState({ vendedores: ID.docs})
+  }
+
+  getProductos = async () => {
+    const ID = await getProducts();
+    this.setState({ productos: ID.docs })
+  }
+
+  componentDidMount(){
+    this.getIdSale();
+    this.getVendedores();
+    this.getProductos();
+  }
+
   render() {
     return (
-      <div class="config-crearVenta">
+      <div className="config-crearVenta">
 
         {/* Barra del Menu */}
         <Home />
@@ -33,13 +86,13 @@ class crearVenta extends React.Component {
         {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
 
         <section className="home-section">
-            <h1 className="titulo1">Creacion de Ventas</h1>
+            <h1 className="titulo1">Creación de Ventas</h1>
           <div className="form-crearVenta">
             <Row form>
               <Col md={2}>
                 <FormGroup>
-                  <Label disabled for="documentoInput">Identificador</Label>
-                  <Input type="text" />
+                  <Label for="documentoInput">Identificador</Label>
+                  <Input disabled type="text" value={this.state.id}/>
                 </FormGroup>
               </Col>
               <Col md={5}>
@@ -51,7 +104,7 @@ class crearVenta extends React.Component {
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Documento Cliente</Label>
-                  <Input type="text" name="nombre" id="nombreInput" placeholder="Ingresa el nombre del cliente" />
+                  <Input type="text"  placeholder="Ingresa el documento del cliente" />
                 </FormGroup>
               </Col>
             </Row>
@@ -62,10 +115,11 @@ class crearVenta extends React.Component {
               </Col>
               <Col md={6}>
                 <Label for="encargadoInput">Encargado del Servicio</Label>
-                <Input type="select" name="encargado" id="encargadoInput">
-                  <option>---</option>
-                  <option>Juan De La Torre</option>
-                  <option>Johan Forero</option>
+                <Input type="select" onChange={this.handleChange}>
+                  <option>Seleccione un vendedor</option>
+                  {this.state.vendedores.map(elemento => (
+                    <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
+                  ))}
                 </Input>
               </Col>
               <Col md={3}>
@@ -78,7 +132,12 @@ class crearVenta extends React.Component {
               <Col md={4}>
                 <FormGroup>
                   <Label disabled for="documentoInput">Producto</Label>
-                  <Input type="text" />
+                  <Input type="select" onChange={this.handleChangeProducto} value={this.state.seleccionProducto}>
+                    <option>Seleccione un producto</option>
+                    {this.state.productos.map(elemento => (
+                      <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
+                    ))}
+                  </Input>
                 </FormGroup>
               </Col>
               <Col md={3}>
@@ -89,18 +148,18 @@ class crearVenta extends React.Component {
               </Col>
               <Col md={5}>
                 <FormGroup>
-                  <Label for="nombreInput">Valor total producto</Label>
-                  <Input type="text" />
+                  <Label for="nombreInput">Valor Unitario</Label>
+                  <Input type="text" disable value={this.state.cash.valorUnitario} />
                 </FormGroup>
               </Col>
             </Row>
-            <Button className="boton-crearVenta" color="primary" onClick={this.abrirModalMensaje}>Agregar Producto</Button>
+            <Button className="boton-crearVenta" color="primary" onClick={this.verificarDatos}>Agregar Producto</Button>
             <Table className='tablesale'>
               <thead>
                 <tr>
                   <th>Producto</th>
                   <th>Cantidad</th>
-                  <th>Valor Unitario</th>
+                  <th>Valor Total Producto</th>
                 </tr>
               </thead>
               <tbody>
