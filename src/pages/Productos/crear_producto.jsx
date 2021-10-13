@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './components/formulario.css';
+import './crear_producto.css'
 import Home from '../Home/home';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase, { db } from '../../firebase-config';
 import { saveProduct, listproduct } from '../../api';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
 import productos from './productos';
+import { __importDefault } from 'tslib';
 
 class crear_producto extends React.Component {
 
@@ -15,7 +17,7 @@ class crear_producto extends React.Component {
   //creacion de data donde almacenaremos los listados
   state = {
     abiertoMensaje: false,
-    id : "", 
+    id: "",
     form: {
       id: "",
       codigo: "",
@@ -30,7 +32,7 @@ class crear_producto extends React.Component {
   getIdProduct = async () => {
     const ID = await listproduct();
     console.log(ID.docs.length);
-    this.setState({id: ID.docs.length+1})
+    this.setState({ id: ID.docs.length + 1 })
 
   }
 
@@ -46,9 +48,13 @@ class crear_producto extends React.Component {
   getProduct = async () => {
 
     saveProduct(this.state.id, this.state.form.codigo, this.state.form.nombreProduct, this.state.form.valorUnitario, this.state.form.estado);
-    this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
+    this.setState({ abiertoMensaje: !this.state.abiertoMensaje });
     this.getIdProduct();
+    document.getElementById("codigo").value = "";
+    document.getElementById("nombre").value = "";
+    document.getElementById("valor").value = "";
   }
+
 
   handleChange = (e) => {
     this.setState({
@@ -58,8 +64,6 @@ class crear_producto extends React.Component {
       },
     });
   };
-
- 
 
   render() {
 
@@ -71,7 +75,7 @@ class crear_producto extends React.Component {
 
         <section class="home-section">
           <div className="container">
-            <form className="formulario">
+            <form className="formulario" id="formulario">
               <center><h1>Registro de Productos</h1></center>
               <br></br>
               <div>
@@ -87,8 +91,11 @@ class crear_producto extends React.Component {
                     <input type="number" id="valor" name="valorUnitario" placeholder="$" onChange={this.handleChange} />
                   </div>
                   <div className="col-6">
-                    <label htmlFor="estado">Estado</label>
-                    <input type="text" id="estado" name="estado" onChange={this.handleChange} />
+                    <Label >Estado</Label>
+                    <Input type="select" className="estado" id="estado" name="estado" onChange={this.handleChange}>
+                      <option selected>Disponible</option>
+                      <option>No disponible</option>
+                    </Input>
                   </div>
                 </div>
                 <div className="row">
@@ -114,3 +121,4 @@ class crear_producto extends React.Component {
   }
 }
 export default crear_producto;
+
