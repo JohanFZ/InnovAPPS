@@ -1,20 +1,28 @@
-
-  
-  .md {
-    left: 100px;
-    top: 40px;
-  }
-
-.config-crearVenta{
-    overflow: hidden;
-}
-
 .form-crearVenta{
     width: 80%;
-    padding-top: 5%;
+    height: 200px;
+    padding-top: 1%;
     margin: auto;
 }
 
 .boton-crearVenta{
     margin-top:20px;
+    margin-bottom: 20px;
 }
+
+.titulo3 {
+  margin: 120px 0 0 0;
+}
+
+  .tablesale {
+    background: #fff;
+    position: relative;
+    font-size: 15px;
+    vertical-align: middle;
+    top: 20px;
+  }
+
+  .titulo1 {
+    margin: 5px;
+    color: rgb(8, 8, 8);
+  }

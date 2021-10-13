@@ -4,12 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './usuarios.css'
 import Home from '../Home/home'
 import { ListUsers, ListUsersForEmail, ListUsersForID, updateUser } from '../../api';
-import {
-  UncontrolledButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap';
+import { UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
 class usuarios extends React.Component {
 
   //creacion de data donde almacenaremos los listados

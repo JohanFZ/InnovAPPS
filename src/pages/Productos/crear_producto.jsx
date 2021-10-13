@@ -13,7 +13,6 @@ class crear_producto extends React.Component {
 
 
 
-
   //creacion de data donde almacenaremos los listados
   state = {
     abiertoMensaje: false,
@@ -80,11 +79,11 @@ class crear_producto extends React.Component {
               <br></br>
               <div>
                 <label htmlFor="id">Identificador de producto</label>
-                <input type="text" id="id" name="id" readOnly type="text" value={this.state.id} />
+                <input type="text" id="id" name="id" readOnly value={this.state.id} />
                 <label htmlFor="codigo">Código</label>
                 <input type="number" id="codigo" name="codigo" placeholder="123" onChange={this.handleChange} />
                 <label htmlFor="nombre">Nombre del producto</label>
-                <input type="text" id="nombre" name="nombreProduct" placeholder="producto marca x" onChange={this.handleChange} />
+                <input type="text" id="nombre" name="nombreProduct" placeholder="Nombre del Producto o Servicio" onChange={this.handleChange} />
                 <div className="row">
                   <div className="col-6">
                     <label htmlFor="valor">Valor unitario</label>
@@ -93,7 +92,8 @@ class crear_producto extends React.Component {
                   <div className="col-6">
                     <Label >Estado</Label>
                     <Input type="select" className="estado" id="estado" name="estado" onChange={this.handleChange}>
-                      <option selected>Disponible</option>
+                      <option selected>Seleccione su opción</option>
+                      <option>Disponible</option>
                       <option>No disponible</option>
                     </Input>
                   </div>
