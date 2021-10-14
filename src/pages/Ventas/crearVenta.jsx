@@ -22,7 +22,15 @@ class crearVenta extends React.Component {
     seleccionEncargado: '',
     productos: [],
     seleccionProducto: '',
-    cash: []
+    cash: [],
+    totalVenta: '',
+    cantidad: '',
+    data: [],
+    form: {
+      nombreCliente: '',
+      documentoCliente: '',
+      fecha: '',
+    }
   };
 
   handleChange = (event) => {
@@ -33,13 +41,24 @@ class crearVenta extends React.Component {
     this.setState({ seleccionProducto: event.target.value });
   };
 
+  handleChangeCantidad= (event) => {
+    this.setState({ cantidad: event.target.value });
+  };
+
   componentDidUpdate(){
     this.getCash();
   }
 
-  verificarDatos = () => {
-    console.log(this.state.seleccionEncargado);
-    this.getCash();
+  agregarProducto = () => {
+    var productoNuevo = [];
+    productoNuevo.nombre = this.state.seleccionProducto;
+    productoNuevo.cantidad = this.state.cantidad;
+    productoNuevo.valorUnitario = this.state.cash.valorUnitario * this.state.cantidad
+    var lista = this.state.data;
+    lista.push(productoNuevo);
+    var total = this.state.totalVenta;
+    this.setState({totalVenta : parseInt(total + productoNuevo.valorUnitario)})
+    this.setState({data : lista});
   }
 
   abrirModalMensaje = () => {
@@ -76,6 +95,23 @@ class crearVenta extends React.Component {
     this.getProductos();
   }
 
+  handleChangeDatos = (e) => {
+    this.setState({
+      form: {
+        ...this.state.form,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  verificarDatos = () => {
+    console.log(this.state.id);
+    console.log(this.state.seleccionEncargado);
+    console.log(this.state.totalVenta);
+    console.log(this.state.data);
+    console.log(this.state.form);
+  }
+
   render() {
     return (
       <div className="config-crearVenta">
@@ -98,20 +134,20 @@ class crearVenta extends React.Component {
               <Col md={5}>
                 <FormGroup>
                   <Label for="documentoInput">Nombre Cliente</Label>
-                  <Input type="text" placeholder="Ingresa el nombre del cliente" />
+                  <Input type="text" name='nombreCliente' onChange={this.handleChangeDatos} placeholder="Ingresa el nombre del cliente" />
                 </FormGroup>
               </Col>
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Documento Cliente</Label>
-                  <Input type="text"  placeholder="Ingresa el documento del cliente" />
+                  <Input type="text" name='documentoCliente' onChange={this.handleChangeDatos}  placeholder="Ingresa el documento del cliente" />
                 </FormGroup>
               </Col>
             </Row>
             <Row form>
               <Col md={3}>
                 <Label for="fechaVentaInput">Fecha Venta</Label>
-                <Input type="date" name="fechaventa" id="fechaVentaInput" placeholder="Ingresa la fecha de la realizacion de la venta" />
+                <Input type="date" name="fecha" onChange={this.handleChangeDatos} placeholder="Ingresa la fecha de la realizacion de la venta" />
               </Col>
               <Col md={6}>
                 <Label for="encargadoInput">Encargado del Servicio</Label>
@@ -124,7 +160,7 @@ class crearVenta extends React.Component {
               </Col>
               <Col md={3}>
                 <Label for="fechaVentaInput">Valor total venta</Label>
-                <Input type="text" name="fechaventa" id="fechaVentaInput" placeholder="$" />
+                <Input type="text" disabled placeholder="$" value={this.state.totalVenta} />
               </Col>
             </Row>
             <h3 className='titulo3'>Productos</h3>
@@ -132,7 +168,7 @@ class crearVenta extends React.Component {
               <Col md={4}>
                 <FormGroup>
                   <Label disabled for="documentoInput">Producto</Label>
-                  <Input type="select" onChange={this.handleChangeProducto} value={this.state.seleccionProducto}>
+                  <Input type="select" onChange={this.handleChangeProducto}>
                     <option>Seleccione un producto</option>
                     {this.state.productos.map(elemento => (
                       <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
@@ -143,17 +179,17 @@ class crearVenta extends React.Component {
               <Col md={3}>
                 <FormGroup>
                   <Label for="documentoInput">Cantidad</Label>
-                  <Input type="text" placeholder="Ingresa el nombre del cliente" />
+                  <Input type="text" placeholder="Ingresa el nombre del cliente" onChange={this.handleChangeCantidad} />
                 </FormGroup>
               </Col>
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Valor Unitario</Label>
-                  <Input type="text" disable value={this.state.cash.valorUnitario} />
+                  <Input type="text" disabled value={this.state.cash.valorUnitario} />
                 </FormGroup>
               </Col>
             </Row>
-            <Button className="boton-crearVenta" color="primary" onClick={this.verificarDatos}>Agregar Producto</Button>
+            <Button className="boton-crearVenta" color="primary" onClick={this.agregarProducto}>Agregar Producto</Button>
             <Table className='tablesale'>
               <thead>
                 <tr>
@@ -163,14 +199,16 @@ class crearVenta extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Tutela</td>
-                  <td>5</td>
-                  <td>2500000</td>
-                </tr>
+                {this.state.data.map(elemento => (
+                  <tr>
+                    <td>{elemento.nombre}</td>
+                    <td>{elemento.cantidad}</td>
+                    <td>{elemento.valorUnitario}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
-            <Button className="boton-crearVenta" color="primary" onClick={this.abrirModalMensaje}>Guardar Venta</Button>
+            <Button className="boton-crearVenta" color="primary" onClick={this.verificarDatos}>Guardar Venta</Button>
           </div>
         </section>
 

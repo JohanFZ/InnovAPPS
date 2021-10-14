@@ -85,13 +85,13 @@ class home extends React.Component {
       <div>
         <div className="sidebar close">
           <div className="logo-details">
-            <i class='bx bxs-ghost'></i>
-            <span class="logo_name">InnovApps</span>
+            <i className='bx bxs-ghost'></i>
+            <span className="logo_name">InnovApps</span>
           </div>
           <ul className="nav-links">
             <li>
               <a href="/home">
-                <i class='bx bx-grid-alt' ></i>
+                <i className='bx bx-grid-alt' ></i>
                 <span className="link_name">Dashboard</span>
               </a>
             </li>
@@ -99,10 +99,10 @@ class home extends React.Component {
             <li>
               <div className="iocn-links" id="ventas">
                 <a href="#">
-                  <i class='bx bx-calculator' ></i>
+                  <i className='bx bx-calculator' ></i>
                   <span className="link_name">Ventas</span>
                 </a>
-                <i class='bx bx-chevron-down arrow' ></i>
+                <i className='bx bx-chevron-down arrow' ></i>
               </div>
               <ul className="sub-menu">
                 <li><a href="/crearVenta">Crear Venta</a></li>
@@ -113,10 +113,10 @@ class home extends React.Component {
             <li>
               <div className="iocn-links" id="productos">
                 <a href="#">
-                  <i class='bx bx-cart'></i>
+                  <i className='bx bx-cart'></i>
                   <span className="link_name">Productos</span>
                 </a>
-                <i class='bx bx-chevron-down arrow' ></i>
+                <i className='bx bx-chevron-down arrow' ></i>
               </div>
               <ul className="sub-menu">
                 <li><a href="/crear_producto">Crear Producto</a></li>
@@ -127,10 +127,10 @@ class home extends React.Component {
             <li>
               <div className="iocn-links" id="usuarios">
                 <a href="#">
-                  <i class='bx bx-user' ></i>
+                  <i className='bx bx-user' ></i>
                   <span className="link_name">Usuarios</span>
                 </a>
-                <i class='bx bx-chevron-down arrow' ></i>
+                <i className='bx bx-chevron-down arrow' ></i>
               </div>
               <ul className="sub-menu">
                 <li><a href="/usuarios">Listar y Actualizar Usuarios</a></li>
@@ -138,15 +138,15 @@ class home extends React.Component {
             </li>
 
             <li>
-              <div class="profile-details">
-                <div class="profile-content">
+              <div className="profile-details">
+                <div className="profile-content">
                   <img src={this.state.photo} alt="profileImg" />
                 </div>
-                <div class="name-job">
-                  <div class="profile_name">{this.state.nombre}</div>
-                  <div class="job">{this.state.rol}</div>
+                <div className="name-job">
+                  <div className="profile_name">{this.state.nombre}</div>
+                  <div className="job">{this.state.rol}</div>
                 </div>
-                <i class='bx bx-log-out' onClick={this.signOut}></i>
+                <i className='bx bx-log-out' onClick={this.signOut}></i>
               </div>
             </li>
           </ul>
