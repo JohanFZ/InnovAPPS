@@ -147,3 +147,9 @@ export const ListProductsCash = async (id) => {
 
   return querySnapshot;
 }
+
+// Metodo para guardar venta
+export const saveSale = (id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal) => {
+
+  addDoc(collection(db, 'sales'), { id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal });
+}

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Col, Row, Button, Form, FormGroup, Label, Input, Table } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './crearVenta.css'
 import Home from '../Home/home'
-import { ListSales, ListProductsVendor, getProducts, ListProductsCash } from '../../api';
+import { ListSales, ListProductsVendor, getProducts, ListProductsCash, saveSale } from '../../api';
 
 const data = [
   { id: "jforero", Nombre: "Johan Forero", Rol: "administrador", Estado: "autorizado" },
@@ -26,6 +26,7 @@ class crearVenta extends React.Component {
     totalVenta: '',
     cantidad: '',
     data: [],
+    data1 : [{nombre:'Alison'},{nombre: 'Johan'}],
     form: {
       nombreCliente: '',
       documentoCliente: '',
@@ -50,7 +51,7 @@ class crearVenta extends React.Component {
   }
 
   agregarProducto = () => {
-    var productoNuevo = [];
+    var productoNuevo = {};
     productoNuevo.nombre = this.state.seleccionProducto;
     productoNuevo.cantidad = this.state.cantidad;
     productoNuevo.valorUnitario = this.state.cash.valorUnitario * this.state.cantidad
@@ -104,12 +105,13 @@ class crearVenta extends React.Component {
     });
   };
 
-  verificarDatos = () => {
-    console.log(this.state.id);
-    console.log(this.state.seleccionEncargado);
-    console.log(this.state.totalVenta);
-    console.log(this.state.data);
-    console.log(this.state.form);
+  guardarVenta = () => {
+    saveSale(this.state.id, this.state.form.nombreCliente, this.state.form.documentoCliente, this.state.form.fecha,
+      this.state.seleccionEncargado, this.state.data, this.state.totalVenta);
+    this.abrirModalMensaje();
+    // console.log(this.state.data);
+    // console.log(Object.assign({}, this.state.data));
+    // console.log(this.state.data1);
   }
 
   render() {
@@ -208,7 +210,7 @@ class crearVenta extends React.Component {
                 ))}
               </tbody>
             </Table>
-            <Button className="boton-crearVenta" color="primary" onClick={this.verificarDatos}>Guardar Venta</Button>
+            <Button className="boton-crearVenta" color="primary" onClick={this.guardarVenta}>Guardar Venta</Button>
           </div>
         </section>
 
