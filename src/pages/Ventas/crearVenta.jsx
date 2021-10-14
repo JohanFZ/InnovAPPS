@@ -109,9 +109,14 @@ class crearVenta extends React.Component {
     saveSale(this.state.id, this.state.form.nombreCliente, this.state.form.documentoCliente, this.state.form.fecha,
       this.state.seleccionEncargado, this.state.data, this.state.totalVenta);
     this.abrirModalMensaje();
-    // console.log(this.state.data);
-    // console.log(Object.assign({}, this.state.data));
-    // console.log(this.state.data1);
+    this.getIdSale();
+    document.getElementById('nombrec').value = '';
+    document.getElementById('documentoc').value = '';
+    document.getElementById('fecha').value = '';
+    document.getElementById('cantidad').value = '';
+    document.getElementById('encargado').selectedIndex = 0;
+    document.getElementById('producto').selectedIndex= 0;
+    this.setState({data : [], totalVenta : '', cash : []})
   }
 
   render() {
@@ -136,25 +141,25 @@ class crearVenta extends React.Component {
               <Col md={5}>
                 <FormGroup>
                   <Label for="documentoInput">Nombre Cliente</Label>
-                  <Input type="text" name='nombreCliente' onChange={this.handleChangeDatos} placeholder="Ingresa el nombre del cliente" />
+                  <Input type="text" name='nombreCliente' id='nombrec' onChange={this.handleChangeDatos} placeholder="Ingresa el nombre del cliente" />
                 </FormGroup>
               </Col>
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Documento Cliente</Label>
-                  <Input type="text" name='documentoCliente' onChange={this.handleChangeDatos}  placeholder="Ingresa el documento del cliente" />
+                  <Input type="text" name='documentoCliente' id='documentoc' onChange={this.handleChangeDatos}  placeholder="Ingresa el documento del cliente" />
                 </FormGroup>
               </Col>
             </Row>
             <Row form>
               <Col md={3}>
                 <Label for="fechaVentaInput">Fecha Venta</Label>
-                <Input type="date" name="fecha" onChange={this.handleChangeDatos} placeholder="Ingresa la fecha de la realizacion de la venta" />
+                <Input type="date" name="fecha" onChange={this.handleChangeDatos} id='fecha' placeholder="Ingresa la fecha de la realizacion de la venta" />
               </Col>
               <Col md={6}>
                 <Label for="encargadoInput">Encargado del Servicio</Label>
-                <Input type="select" onChange={this.handleChange}>
-                  <option>Seleccione un vendedor</option>
+                <Input type="select" id='encargado' onChange={this.handleChange}>
+                  <option selected>Seleccione un vendedor</option>
                   {this.state.vendedores.map(elemento => (
                     <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
                   ))}
@@ -162,7 +167,7 @@ class crearVenta extends React.Component {
               </Col>
               <Col md={3}>
                 <Label for="fechaVentaInput">Valor total venta</Label>
-                <Input type="text" disabled placeholder="$" value={this.state.totalVenta} />
+                <Input type="text" id='total' disabled placeholder="$" value={this.state.totalVenta} />
               </Col>
             </Row>
             <h3 className='titulo3'>Productos</h3>
@@ -170,7 +175,7 @@ class crearVenta extends React.Component {
               <Col md={4}>
                 <FormGroup>
                   <Label disabled for="documentoInput">Producto</Label>
-                  <Input type="select" onChange={this.handleChangeProducto}>
+                  <Input type="select" id='producto' onChange={this.handleChangeProducto}>
                     <option>Seleccione un producto</option>
                     {this.state.productos.map(elemento => (
                       <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
@@ -181,13 +186,13 @@ class crearVenta extends React.Component {
               <Col md={3}>
                 <FormGroup>
                   <Label for="documentoInput">Cantidad</Label>
-                  <Input type="text" placeholder="Ingresa el nombre del cliente" onChange={this.handleChangeCantidad} />
+                  <Input type="text" id='cantidad' placeholder="Ingresa el nombre del cliente" onChange={this.handleChangeCantidad} />
                 </FormGroup>
               </Col>
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Valor Unitario</Label>
-                  <Input type="text" disabled value={this.state.cash.valorUnitario} />
+                  <Input type="text" id='valoru' disabled value={this.state.cash.valorUnitario} />
                 </FormGroup>
               </Col>
             </Row>
