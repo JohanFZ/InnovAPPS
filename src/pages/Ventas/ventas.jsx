@@ -6,30 +6,17 @@ import Home from '../Home/home'
 
 const data = [
     {
-        id: 1, valorTotalVenta: 3000, identificador: "Servicios legales tributarios", cantidad: 3, precioUnitario: 2000,
+        id: 1, valorTotalVenta: 3000,identificador: "Servicios legales tributarios", cantidad: 3, precioUnitario: 2000,
         fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Johan Forero", encargadoVenta: "Johan Reyes",
         estadoVenta: "En proceso"
+        
     },
     {
         id: 2, valorTotalVenta: 6000, identificador: "Procesos de pertenencia", cantidad: 1, precioUnitario: 3000,
         fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Jennifer Paez", encargadoVenta: "Alvaro Leon",
         estadoVenta: "Cancelada"
     },
-    {
-        id: 3, valorTotalVenta: 10000, identificador: "Servidumbres", cantidad: 7, precioUnitario: 5000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Cristian Becerra", encargadoVenta: "Nicolas Herrera",
-        estadoVenta: "Entregada"
-    },
-    {
-        id: 4, valorTotalVenta: 1000, identificador: "procesos sancionatorios", cantidad: 5, precioUnitario: 7000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Daniel Acuña", encargadoVenta: "Joseph Diaz",
-        estadoVenta: "En proceso"
-    },
-    {
-        id: 5, valorTotalVenta: 60000, identificador: "Declaratoria de utilidad publica", cantidad: 6, precioUnitario: 3000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "lisseth ortiz", encargadoVenta: "Sandra Sanchez",
-        estadoVenta: "En proceso"
-    },
+    
 ];
 
 class ventas extends React.Component {
@@ -39,8 +26,10 @@ class ventas extends React.Component {
         data: data,
         modalActualizar: false,
         abiertoMensaje: false,
+        modalProductos: false,
         busqueda: '',
         productos: [],
+        productosCadaVenta:[],
         form: {
             id: "",
             valorTotalVenta: '',
@@ -56,6 +45,7 @@ class ventas extends React.Component {
         },
     };
 
+
     mostrarModalActualizar = (dato) => {
         this.setState({
             form: dato,
@@ -63,10 +53,22 @@ class ventas extends React.Component {
         });
     };
 
+    abrirModalActualizar = (registro) => {
+        this.setState({ form: registro, abierto: !this.state.abierto });
+        this.setState({ codigo: registro.codigo });
+        this.setState({ nombre: registro.nombre });
+        this.setState({ valor: registro.valorUnitario });
+        this.setState({ estado: registro.estado });
+      }
+
     cerrarModalActualizar = () => {
         this.setState({ modalActualizar: false });
     };
-
+    
+    estadoModalProductos = () => {
+        this.setState({ modalProductos: !this.state.modalProductos});
+    };
+    
     editar = (dato) => {
         var contador = 0;
         var arreglo = this.state.data;
@@ -186,32 +188,17 @@ class ventas extends React.Component {
                     <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
 
                     <ModalBody>
-                        <Label> Valor Total de la Venta:</Label>
-                        <input className="form-control" name="valorTotalVenta" type="text" onChange={this.handleChange} value={this.state.form.valorTotalVenta} />
+                           
 
-                        <Label>Producto:</Label>
-                        <input className="form-control" name="identificador" type="text" onChange={this.handleChange} value={this.state.form.identificador} />
 
-                        <Label>Cantidad:</Label>
-                        <input className="form-control" name="cantidad" type="text" onChange={this.handleChange} value={this.state.form.cantidad} />
-
-                        <Label>Precio Unitario:</Label>
-                        <input className="form-control" name="precioUnitario" type="text" onChange={this.handleChange} value={this.state.form.precioUnitario} />
-
-                        <Label>Fecha de Venta:</Label>
-                        <input className="form-control" name="fechaVenta" type="text" onChange={this.handleChange} value={this.state.form.fechaVenta} />
-
-                        <Label>Documento de Identificacion:</Label>
-                        <input className="form-control" name="documentoIdentificacion" type="text" onChange={this.handleChange} value={this.state.form.documentoIdentificacion} />
-
-                        <Label>Nombre del Cliente:</Label>
-                        <input className="form-control" name="nombreCliente" type="text" onChange={this.handleChange} value={this.state.form.nombreCliente} />
-
-                        <Label>Encargado de la Venta:</Label>
-                        <input className="form-control" name="encargadoVenta" type="text" onChange={this.handleChange} value={this.state.form.encargadoVenta} />
-
-                        <Label>Estado de la Venta:</Label>
-                        <input className="form-control" name="estadoVenta" type="text" onChange={this.handleChange} value={this.state.form.estadoVenta} />
+                        <Button onClick={this.estadoModalProductos}>AbrirModalProductos</Button>
+                        <Modal isOpen = {this.state.modalProductos} className = "md">
+                            <ModalHeader>Mensaje Informativo</ModalHeader>
+                            <ModalBody>Esto es una prueba</ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" onClick={this.estadoModalProductos}>Cancelar</Button>
+                            </ModalFooter>
+                        </Modal>
                     </ModalBody>
 
                     <ModalFooter>
@@ -228,7 +215,10 @@ class ventas extends React.Component {
                         <Button color="primary" onClick={this.editar}>Hecho</Button>
                     </ModalFooter>
                 </Modal>
-
+                
+                {/* Modal Edicion Productos
+                
+                */}
             </div>
         );
     }
