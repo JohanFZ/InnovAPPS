@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
 import { UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForEncargado} from '../../api';
+import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForDC} from '../../api';
 
 
 class ventas extends React.Component {
@@ -26,7 +26,6 @@ class ventas extends React.Component {
             documentoIdentificacion: '',
             nombreCliente: '',
             encargadoVenta: '',
-            estadoVenta: '',
 
         },
         sales: [],
@@ -65,8 +64,8 @@ class ventas extends React.Component {
         }
     }
 
-    filtrarElementosporEncargado = async () => {
-        const dataU = await ListSalesForEncargado(this.state.busqueda);
+    filtrarElementosporDC = async () => {
+        const dataU = await ListSalesForDC(this.state.busqueda);
         if (dataU.docs.length === 0) {
             this.getSales();
         } else {
@@ -123,13 +122,9 @@ class ventas extends React.Component {
                                         <DropdownItem header>Filtros</DropdownItem>
                                         <DropdownItem onClick={this.filtrarElementosporId}>Id</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={this.filtrarElementosporProduct}>Producto</DropdownItem>
-                                        <DropdownItem divider />
                                         <DropdownItem onClick={this.filtrarElementosporNomCliente}>Nombre Cliente</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={this.filtrarElementosporEncargado}>Encargado</DropdownItem>
-                                        <DropdownItem divider />
-                                        <DropdownItem onClick={this.filtrarElementosporProduct}>Estado</DropdownItem>
+                                        <DropdownItem onClick={this.filtrarElementosporDC}>Docuemnto del Cliente</DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledButtonDropdown>
                             </InputGroup>
@@ -146,7 +141,6 @@ class ventas extends React.Component {
                                     <th className="row-identificacion">D.Identificacion</th>
                                     <th className="row-cliente">N Cliente</th>
                                     <th className="row-encargado">Encargado</th>
-                                    <th className="row-estado">Estado</th>
                                     <th> Acciones</th>
                                 </tr>
                             </thead>
@@ -163,7 +157,6 @@ class ventas extends React.Component {
                                         <td>{elemento.data().documentoCliente}</td>
                                         <td>{elemento.data().nombreCliente}</td>
                                         <td>{elemento.data().encargado}</td>
-                                        <td>{elemento.data().estado}</td>
                                         <td><Button color="primary" onClick={() => this.abrirModal(elemento.data(), elemento)}>Editar</Button></td>
                                     </tr>
                                 ))}
