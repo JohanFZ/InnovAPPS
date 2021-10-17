@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label, Form } from 'reactstrap';
+import { Col, Row, FormGroup } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
@@ -14,8 +15,10 @@ class ventas extends React.Component {
         busqueda: '',
         modalActualizar: false,
         abiertoMensaje: false,
+        modalProductos: false,
         busqueda: '',
         productos: [],
+        productosCadaVenta:[],
         form: {
             id: '',
             valorTotalVenta: '',
@@ -41,6 +44,14 @@ class ventas extends React.Component {
             modalActualizar: true,
         });
     };
+
+    abrirModalActualizar = (registro) => {
+        this.setState({ form: registro, abierto: !this.state.abierto });
+        this.setState({ codigo: registro.codigo });
+        this.setState({ nombre: registro.nombre });
+        this.setState({ valor: registro.valorUnitario });
+        this.setState({ estado: registro.estado });
+      }
 
     cerrarModalActualizar = () => {
         this.setState({ modalActualizar: false });
@@ -171,32 +182,47 @@ class ventas extends React.Component {
                     <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
 
                     <ModalBody>
-                        <Label> Valor Total de la Venta:</Label>
-                        <input className="form-control" name="valorTotalVenta" type="text" onChange={this.handleChange} value={this.state.form.valorTotalVenta} />
+                        <Button onClick={this.estadoModalProductos}>AbrirModalProductos</Button>
+                        <Modal isOpen = {this.state.modalProductos} >
+                            <ModalHeader>Mensaje Informativo</ModalHeader>
+                            <ModalBody>
+                                {
+                                    this.state.productosCadaVenta.map((elemento,index) => {
+                                        return(
+                                            <div key = {index}>
+                                                <Form>
+                                                    <Row form>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="documentoInput">Cantidad</Label>
+                                                        <Input value={elemento.cantidad}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="documentoInput">Nombre</Label>
+                                                        <Input value = { elemento.nombre}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="nombreInput">Valor Unitario</Label>
+                                                        <Input value = { elemento.valorUnitario}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    </Row>
+                                                </Form>
+                                            </div>
+                                        )
+                                    })
+                                        
+                                }
 
-                        <Label>Producto:</Label>
-                        <input className="form-control" name="identificador" type="text" onChange={this.handleChange} value={this.state.form.identificador} />
-
-                        <Label>Cantidad:</Label>
-                        <input className="form-control" name="cantidad" type="text" onChange={this.handleChange} value={this.state.form.cantidad} />
-
-                        <Label>Precio Unitario:</Label>
-                        <input className="form-control" name="precioUnitario" type="text" onChange={this.handleChange} value={this.state.form.precioUnitario} />
-
-                        <Label>Fecha de Venta:</Label>
-                        <input className="form-control" name="fechaVenta" type="text" onChange={this.handleChange} value={this.state.form.fechaVenta} />
-
-                        <Label>Documento de Identificacion:</Label>
-                        <input className="form-control" name="documentoIdentificacion" type="text" onChange={this.handleChange} value={this.state.form.documentoIdentificacion} />
-
-                        <Label>Nombre del Cliente:</Label>
-                        <input className="form-control" name="nombreCliente" type="text" onChange={this.handleChange} value={this.state.form.nombreCliente} />
-
-                        <Label>Encargado de la Venta:</Label>
-                        <input className="form-control" name="encargadoVenta" type="text" onChange={this.handleChange} value={this.state.form.encargadoVenta} />
-
-                        <Label>Estado de la Venta:</Label>
-                        <input className="form-control" name="estadoVenta" type="text" onChange={this.handleChange} value={this.state.form.estadoVenta} />
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" onClick={this.estadoModalProductos}>Cancelar</Button>
+                            </ModalFooter>
+                        </Modal>
                     </ModalBody>
 
                     <ModalFooter>
