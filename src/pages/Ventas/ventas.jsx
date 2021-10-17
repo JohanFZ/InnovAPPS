@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label, Form } from 'reactstrap';
+import { Col, Row, FormGroup } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
@@ -18,6 +19,24 @@ const data = [
     },
     
 ];
+
+const productTest = [
+    {
+        cantidad: "2",
+        nombre: "Servicios Legales Tributarios",
+        valorUnitario: 200400
+    },
+    {
+        cantidad: "20",
+        nombre: "Tutelas",
+        valorUnitario: 1000000
+    },
+    {
+        cantidad: "3",
+        nombre: "Servicio Familiar",
+        valorUnitario: 1000
+    }
+]
 
 class ventas extends React.Component {
 
@@ -119,7 +138,8 @@ class ventas extends React.Component {
 
     //Ciclo de vida (Cuandos se renderiza el componente)
     componentDidMount() {
-        this.setState({ productos: data })
+        this.setState({ productos: data });
+        this.setState({productosCadaVenta: productTest});
     }
 
     render() {
@@ -188,13 +208,43 @@ class ventas extends React.Component {
                     <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
 
                     <ModalBody>
-                           
-
-
                         <Button onClick={this.estadoModalProductos}>AbrirModalProductos</Button>
-                        <Modal isOpen = {this.state.modalProductos} className = "md">
+                        <Modal isOpen = {this.state.modalProductos} >
                             <ModalHeader>Mensaje Informativo</ModalHeader>
-                            <ModalBody>Esto es una prueba</ModalBody>
+                            <ModalBody>
+                                {
+                                    this.state.productosCadaVenta.map((elemento,index) => {
+                                        return(
+                                            <div key = {index}>
+                                                <Form>
+                                                    <Row form>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="documentoInput">Cantidad</Label>
+                                                        <Input value={elemento.cantidad}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="documentoInput">Nombre</Label>
+                                                        <Input value = { elemento.nombre}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md={4}>
+                                                        <FormGroup>
+                                                        <Label for="nombreInput">Valor Unitario</Label>
+                                                        <Input value = { elemento.valorUnitario}/>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    </Row>
+                                                </Form>
+                                            </div>
+                                        )
+                                    })
+                                        
+                                }
+
+                            </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" onClick={this.estadoModalProductos}>Cancelar</Button>
                             </ModalFooter>
