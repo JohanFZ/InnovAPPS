@@ -60,6 +60,7 @@ export const updateUser = async (id, rol, estado) => {
   await updateDoc(doc(db, 'users', id), {rol, estado})
 }
 
+// Metodo para crear producto
 
 export const getProducts = async() => {
 
@@ -152,4 +153,50 @@ export const ListProductsCash = async (id) => {
 export const saveSale = (id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal) => {
 
   addDoc(collection(db, 'sales'), { id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal });
+}
+
+//Metodo para listar todas las ventas
+export const listSales = async () => {
+
+  const result = await getDocs(query(collection(db, 'sales')));
+
+  return result;
+}
+
+//Metodo para realizar busqueda de venta por id
+export const ListSalesForID = async (id) => {
+
+  const UserRef = collection(db, "sales");
+
+  const q = query(UserRef, where("id", "==", id));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
+}
+
+//Metodo para realizar busqueda de venta por nombre del cliente
+
+export const ListSalesForNC = async (nombreCliente) => {
+
+  const UserRef = collection(db, "sales");
+
+  const q = query(UserRef, orderBy('nombreCliente'), startAt(nombreCliente), endAt(nombreCliente + '\uf8ff'));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
+}
+
+//Metodo para realizar busqueda de venta por docuemnto del cliente
+
+export const ListSalesForDC = async (documentoCliente) => {
+
+  const UserRef = collection(db, "sales");
+
+  const q = query(UserRef, orderBy('documentoCliente'), startAt(documentoCliente), endAt(documentoCliente + '\uf8ff'));
+
+  const querySnapshot = await getDocs(q);
+
+  return querySnapshot;
 }

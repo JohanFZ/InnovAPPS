@@ -3,46 +3,21 @@ import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalF
 import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
+import { UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForEncargado} from '../../api';
 
-const data = [
-    {
-        id: 1, valorTotalVenta: 3000, identificador: "Servicios legales tributarios", cantidad: 3, precioUnitario: 2000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Johan Forero", encargadoVenta: "Johan Reyes",
-        estadoVenta: "En proceso"
-    },
-    {
-        id: 2, valorTotalVenta: 6000, identificador: "Procesos de pertenencia", cantidad: 1, precioUnitario: 3000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Jennifer Paez", encargadoVenta: "Alvaro Leon",
-        estadoVenta: "Cancelada"
-    },
-    {
-        id: 3, valorTotalVenta: 10000, identificador: "Servidumbres", cantidad: 7, precioUnitario: 5000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Cristian Becerra", encargadoVenta: "Nicolas Herrera",
-        estadoVenta: "Entregada"
-    },
-    {
-        id: 4, valorTotalVenta: 1000, identificador: "procesos sancionatorios", cantidad: 5, precioUnitario: 7000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "Daniel Acuña", encargadoVenta: "Joseph Diaz",
-        estadoVenta: "En proceso"
-    },
-    {
-        id: 5, valorTotalVenta: 60000, identificador: "Declaratoria de utilidad publica", cantidad: 6, precioUnitario: 3000,
-        fechaVenta: "15/02/2021", documentoIdentificacion: 1000720954, nombreCliente: "lisseth ortiz", encargadoVenta: "Sandra Sanchez",
-        estadoVenta: "En proceso"
-    },
-];
 
 class ventas extends React.Component {
 
     //creacion de data donde almacenaremos los listados
     state = {
-        data: data,
+        busqueda: '',
         modalActualizar: false,
         abiertoMensaje: false,
         busqueda: '',
         productos: [],
         form: {
-            id: "",
+            id: '',
             valorTotalVenta: '',
             identificador: '',
             cantidad: '',
@@ -54,8 +29,13 @@ class ventas extends React.Component {
             estadoVenta: '',
 
         },
+        sales: [],
+        value: ''
     };
 
+    handleChange = (event) => {
+        this.setState({ value: event.target.value });
+    };
     mostrarModalActualizar = (dato) => {
         this.setState({
             form: dato,
@@ -67,57 +47,54 @@ class ventas extends React.Component {
         this.setState({ modalActualizar: false });
     };
 
-    editar = (dato) => {
-        var contador = 0;
-        var arreglo = this.state.data;
-        arreglo.map((registro) => {
-            if (dato.id == registro.id) {
-                arreglo[contador].valorTotalVenta = dato.valorTotalVenta;
-                arreglo[contador].identificador = dato.identificador;
-                arreglo[contador].cantidad = dato.cantidad;
-                arreglo[contador].precioUnitario = dato.precioUnitario;
-                arreglo[contador].fechaVenta = dato.fechaVenta;
-                arreglo[contador].documentoIdentificacion = dato.documentoIdentificacion;
-                arreglo[contador].nombreCliente = dato.nombreCliente;
-                arreglo[contador].encargadoVenta = dato.encargadoVenta;
-                arreglo[contador].estadoVenta = dato.estadoVenta;
-            }
-            contador++;
-        });
-        this.setState({ data: arreglo, modalActualizar: false });
-        this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
-    };
-
-    handleChange = (e) => {
-        this.setState({
-            form: {
-                ...this.state.form,
-                [e.target.name]: e.target.value,
-            },
-        });
-    };
-
-
     //Va verificando el contenido del input
     onChange = async e => {
         e.persist();
         await this.setState({ busqueda: e.target.value });
-        this.filtrarElementos();
+        if (this.state.busqueda.length === 0) {
+            this.getSales();
+        }
     }
 
-    filtrarElementos = () => {
-        var search = data.filter(item => {
-            if (item.id.toString().includes(this.state.busqueda) ||
-                item.identificador.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(this.state.busqueda)) {
-                return item;
-            }
-        });
-        this.setState({ productos: search });
+    filtrarElementosporNomCliente = async () => {
+        const dataU = await ListSalesForNC(this.state.busqueda);
+        if (dataU.docs.length === 0) {
+            this.getSales();
+        } else {
+            this.setState({ sales: dataU.docs });
+        }
+    }
+
+    filtrarElementosporEncargado = async () => {
+        const dataU = await ListSalesForEncargado(this.state.busqueda);
+        if (dataU.docs.length === 0) {
+            this.getSales();
+        } else {
+            this.setState({ sales: dataU.docs });
+        }
+    }
+
+    filtrarElementosporId = async () => {
+        var x = this.state.busqueda;
+        x = parseInt(x);
+        const dataU = await ListSalesForID(x);
+        if (dataU.docs.length === 0) {
+            this.getSales();
+        } else {
+            this.setState({ sales: dataU.docs });
+        }
+    }
+
+    
+
+    getSales = async () => {
+        const sales = await ListSales();
+        this.setState({ sales: sales.docs });
     }
 
     //Ciclo de vida (Cuandos se renderiza el componente)
     componentDidMount() {
-        this.setState({ productos: data })
+        this.getSales();
     }
 
     render() {
@@ -135,54 +112,69 @@ class ventas extends React.Component {
                         <div className="search">
                             <InputGroup>
                                 <Input
-                                    placeholder="Buscar Productos por ID o Nombre"
+                                    placeholder="Buscar Productos"
                                     value={this.state.busqueda}
                                     onChange={this.onChange} />
+                                <UncontrolledButtonDropdown>
+                                    <DropdownToggle caret color="primary" className="buttongp">
+                                        Opciones
+                                    </DropdownToggle>
+                                    <DropdownMenu className="dropdownmenu">
+                                        <DropdownItem header>Filtros</DropdownItem>
+                                        <DropdownItem onClick={this.filtrarElementosporId}>Id</DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem onClick={this.filtrarElementosporProduct}>Producto</DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem onClick={this.filtrarElementosporNomCliente}>Nombre Cliente</DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem onClick={this.filtrarElementosporEncargado}>Encargado</DropdownItem>
+                                        <DropdownItem divider />
+                                        <DropdownItem onClick={this.filtrarElementosporProduct}>Estado</DropdownItem>
+                                    </DropdownMenu>
+                                </UncontrolledButtonDropdown>
                             </InputGroup>
                         </div>
-                        <Table striped className="table1">
+                        <Table striped className="table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Valor Total</th>
-                                    <th>Identificador de producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario</th>
+                                    <th className="row-id">#</th>
+                                    <th className="row-ValorTotal">Valor Total</th>
+                                    <th className="row-producto1" >producto</th>
+                                    <th className="row-cantidad">Cantidad</th>
+                                    <th className="row-precioU">Precio Unitario</th>
                                     <th>Fecha</th>
-                                    <th>D. Identificacion</th>
-                                    <th>N Cliente</th>
-                                    <th>Encargado</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
+                                    <th className="row-identificacion">D.Identificacion</th>
+                                    <th className="row-cliente">N Cliente</th>
+                                    <th className="row-encargado">Encargado</th>
+                                    <th className="row-estado">Estado</th>
+                                    <th> Acciones</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {this.state.productos.map((dato) => (
-                                    <tr key={dato.id}>
-                                        <td>{dato.id}</td>
-                                        <td>{dato.valorTotalVenta}</td>
-                                        <td>{dato.identificador}</td>
-                                        <td>{dato.cantidad}</td>
-                                        <td>{dato.precioUnitario}</td>
-                                        <td>{dato.fechaVenta}</td>
-                                        <td>{dato.documentoIdentificacion}</td>
-                                        <td>{dato.nombreCliente}</td>
-                                        <td>{dato.encargadoVenta}</td>
-                                        <td>{dato.estadoVenta}</td>
-                                        <td>
-                                            <Button color="primary" onClick={() => this.mostrarModalActualizar(dato)}>Editar</Button>
-                                        </td>
+                                {this.state.sales.map(elemento => (
+                                    <tr>
+                                        <td>{elemento.data().id}</td>
+                                        <td>{elemento.data().valorTotal}</td>
+                                        <td>{elemento.data().producto}</td>
+                                        <td>{elemento.data().cantidad}</td>
+                                        <td>{elemento.data().valorUnitario}</td>
+                                        <td>{elemento.data().fecha}</td>
+                                        <td>{elemento.data().documentoCliente}</td>
+                                        <td>{elemento.data().nombreCliente}</td>
+                                        <td>{elemento.data().encargado}</td>
+                                        <td>{elemento.data().estado}</td>
+                                        <td><Button color="primary" onClick={() => this.abrirModal(elemento.data(), elemento)}>Editar</Button></td>
                                     </tr>
                                 ))}
                             </tbody>
                         </Table>
                     </div>
-                </section>
+                </section >
 
                 {/* Modal Ventana Actualizar */}
 
-                <Modal isOpen={this.state.modalActualizar} className="md">
+                < Modal isOpen={this.state.modalActualizar} className="md" >
                     <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
 
                     <ModalBody>
@@ -218,18 +210,18 @@ class ventas extends React.Component {
                         <Button color="primary" onClick={() => this.editar(this.state.form)}>Actualizar</Button>
                         <Button color="danger" onClick={() => this.cerrarModalActualizar()}>Cancelar</Button>
                     </ModalFooter>
-                </Modal>
+                </Modal >
 
                 {/* Modal Mensaje informativo */}
-                <Modal isOpen={this.state.abiertoMensaje}>
+                < Modal isOpen={this.state.abiertoMensaje} >
                     <ModalHeader>Mensaje Informativo</ModalHeader>
                     <ModalBody>La venta se actualizo correctamente.</ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.editar}>Hecho</Button>
                     </ModalFooter>
-                </Modal>
+                </Modal >
 
-            </div>
+            </div >
         );
     }
 }
