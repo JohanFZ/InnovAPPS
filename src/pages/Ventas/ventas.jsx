@@ -145,9 +145,7 @@ class ventas extends React.Component {
                                 <tr>
                                     <th className="row-id">#</th>
                                     <th className="row-ValorTotal">Valor Total</th>
-                                    <th className="row-producto1" >producto</th>
-                                    <th className="row-cantidad">Cantidad</th>
-                                    <th className="row-precioU">Precio Unitario</th>
+                                    <th>Productos</th>
                                     <th>Fecha</th>
                                     <th className="row-identificacion">D.Identificacion</th>
                                     <th className="row-cliente">N Cliente</th>
@@ -161,9 +159,7 @@ class ventas extends React.Component {
                                     <tr>
                                         <td>{elemento.data().id}</td>
                                         <td>{elemento.data().valorTotal}</td>
-                                        <td>{elemento.data().producto}</td>
-                                        <td>{elemento.data().cantidad}</td>
-                                        <td>{elemento.data().valorUnitario}</td>
+                                        <td><Button outline color="primary">Ver Productos</Button></td>
                                         <td>{elemento.data().fecha}</td>
                                         <td>{elemento.data().documentoCliente}</td>
                                         <td>{elemento.data().nombreCliente}</td>
