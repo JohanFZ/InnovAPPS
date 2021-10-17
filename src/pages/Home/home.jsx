@@ -35,9 +35,15 @@ class home extends React.Component {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
+      var nombreVariable;
       if (user) {
         console.log('Sesion Iniciada');
-        this.setState({ nombre: user.displayName, photo: user.photoURL, uid: user.uid, email: user.email });
+        if(user.displayName.length >= 20){
+          nombreVariable= user.displayName.slice(0,14) + "...";
+        }else{
+          nombreVariable = user.displayName;
+        }
+        this.setState({ nombre: nombreVariable, photo: user.photoURL, uid: user.uid, email: user.email });
       } else {
         console.log('Sesion No Iniciada');
       }

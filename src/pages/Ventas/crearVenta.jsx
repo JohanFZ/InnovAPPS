@@ -186,7 +186,7 @@ class crearVenta extends React.Component {
               <Col md={3}>
                 <FormGroup>
                   <Label for="documentoInput">Cantidad</Label>
-                  <Input type="text" id='cantidad' placeholder="Ingresa el nombre del cliente" onChange={this.handleChangeCantidad} />
+                  <Input type="text" id='cantidad' placeholder="Ingresa la cantidad de productos" onChange={this.handleChangeCantidad} />
                 </FormGroup>
               </Col>
               <Col md={5}>
