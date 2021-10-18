@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label, Form, ListGroup } from 'reactstrap';
+import { Col, Row, FormGroup, Container } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
 import { UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForDC} from '../../api';
+import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForDC, updateSales, ListProductsVendor} from '../../api';
 
 
 class ventas extends React.Component {
@@ -14,38 +15,78 @@ class ventas extends React.Component {
         busqueda: '',
         modalActualizar: false,
         abiertoMensaje: false,
+        modalProductos: false,
+        verProductos: false,
         busqueda: '',
-        productos: [],
-        form: {
-            id: '',
-            valorTotalVenta: '',
-            identificador: '',
-            cantidad: '',
-            precioUnitario: '',
-            fechaVenta: '',
-            documentoIdentificacion: '',
-            nombreCliente: '',
-            encargadoVenta: '',
-
-        },
+        productosCadaVenta:[],
         sales: [],
-        value: ''
+        idBASE: '',
+        id: '',
+        nombreCli: '',
+        documentoCli: '',
+        fecha: '',
+        encargado: '',
+        valorTotal: '',
+        vendedores: [],
     };
-
+    
+    getVendedores = async () => {
+        const ID = await ListProductsVendor();
+        this.setState({ vendedores: ID.docs})
+      }
+    handleRemove= () => {
+        this.state.productosCadaVenta.splice(0,1);
+        this.setState({ productosCadaVenta : this.productosCadaVenta})
+    }
     handleChange = (event) => {
-        this.setState({ value: event.target.value });
-    };
-    mostrarModalActualizar = (dato) => {
-        this.setState({
-            form: dato,
-            modalActualizar: true,
-        });
+        this.setState({ encargado: event.target.value });
+      };
+
+      handleChangeNombre = (event) => {
+        this.setState({ nombreCli: event.target.value });
+      };
+    
+      handleChangeDocumento = (event) => {
+        this.setState({ documentoCli: event.target.value });
+      };
+    
+      handleChangeFecha = (event) => {
+        this.setState({ fecha: event.target.value });
+      };
+    
+      handleChangeEncargado = (event) => {
+        this.setState({ encargado: event.target.value });
+      };
+    
+    mostrarModalActualizar = (sale,IDBASE) => {
+        this.setState({ productosCadaVenta: sale.productos});
+        this.setState({ idBASE: IDBASE})
+        this.setState({ id : sale.id, nombreCli: sale.nombreCliente, documentoCli: sale.documentoCliente});
+        this.setState({ fecha : sale.fecha, encargado: sale.encargado, valorTotal: sale.valorTotal});
+        this.setState({ modalActualizar: true});
     };
 
     cerrarModalActualizar = () => {
         this.setState({ modalActualizar: false });
     };
 
+    modalVerProductos = (productosVenta) => {
+        this.setState({productosCadaVenta: productosVenta})
+        this.setState({verProductos: !this.state.verProductos})
+    }
+
+    modalVerProductosCerrar = () =>{
+        this.setState({verProductos: !this.state.verProductos})
+    }
+
+
+    estadoModalProductosActualizar = () =>{
+        this.setState({modalProductos: !this.state.modalProductos})
+    }
+
+    estadoModalMensaje = () => {
+        this.setState({abiertoMensaje: !this.state.abiertoMensaje})
+    }
     //Va verificando el contenido del input
     onChange = async e => {
         e.persist();
@@ -84,16 +125,22 @@ class ventas extends React.Component {
         }
     }
 
-    
-
     getSales = async () => {
         const sales = await ListSales();
         this.setState({ sales: sales.docs });
     }
 
+    upSale = async () => {
+        await updateSales(this.state.idBASE, this.state.nombreCli, this.state.documentoCli, this.state.fecha, this.state.encargado, this.state.productosCadaVenta, this.state.valorTotal);
+        this.getSales();
+        this.cerrarModalActualizar();
+        this.estadoModalMensaje();
+    }
+
     //Ciclo de vida (Cuandos se renderiza el componente)
     componentDidMount() {
         this.getSales();
+        this.getVendedores();
     }
 
     render() {
@@ -124,7 +171,7 @@ class ventas extends React.Component {
                                         <DropdownItem divider />
                                         <DropdownItem onClick={this.filtrarElementosporNomCliente}>Nombre Cliente</DropdownItem>
                                         <DropdownItem divider />
-                                        <DropdownItem onClick={this.filtrarElementosporDC}>Docuemnto del Cliente</DropdownItem>
+                                        <DropdownItem onClick={this.filtrarElementosporDC}>Documento del Cliente</DropdownItem>
                                     </DropdownMenu>
                                 </UncontrolledButtonDropdown>
                             </InputGroup>
@@ -134,9 +181,7 @@ class ventas extends React.Component {
                                 <tr>
                                     <th className="row-id">#</th>
                                     <th className="row-ValorTotal">Valor Total</th>
-                                    <th className="row-producto1" >producto</th>
-                                    <th className="row-cantidad">Cantidad</th>
-                                    <th className="row-precioU">Precio Unitario</th>
+                                    <th>Productos</th>
                                     <th>Fecha</th>
                                     <th className="row-identificacion">D.Identificacion</th>
                                     <th className="row-cliente">N Cliente</th>
@@ -150,14 +195,12 @@ class ventas extends React.Component {
                                     <tr>
                                         <td>{elemento.data().id}</td>
                                         <td>{elemento.data().valorTotal}</td>
-                                        <td>{elemento.data().producto}</td>
-                                        <td>{elemento.data().cantidad}</td>
-                                        <td>{elemento.data().valorUnitario}</td>
+                                        <td><Button outline color="primary" onClick = {() => this.modalVerProductos(elemento.data().productos)}>Ver Productos</Button></td>
                                         <td>{elemento.data().fecha}</td>
                                         <td>{elemento.data().documentoCliente}</td>
                                         <td>{elemento.data().nombreCliente}</td>
                                         <td>{elemento.data().encargado}</td>
-                                        <td><Button color="primary" onClick={() => this.abrirModal(elemento.data(), elemento)}>Editar</Button></td>
+                                        <td><Button color="primary" onClick={() => this.mostrarModalActualizar(elemento.data(),elemento.id)}>Editar</Button></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -168,39 +211,87 @@ class ventas extends React.Component {
                 {/* Modal Ventana Actualizar */}
 
                 < Modal isOpen={this.state.modalActualizar} className="md" >
-                    <ModalHeader>Editar Venta <b>#{this.state.form.id}</b></ModalHeader>
+                    <ModalHeader>Editar Venta</ModalHeader>
 
                     <ModalBody>
-                        <Label> Valor Total de la Venta:</Label>
-                        <input className="form-control" name="valorTotalVenta" type="text" onChange={this.handleChange} value={this.state.form.valorTotalVenta} />
+                        <Form>
+                            <FormGroup>
+                                <Label>Id</Label>
+                                <Input disabled type="text" value={this.state.id}></Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Nombre Cliente</Label>
+                                <Input type="text" onChange={this.handleChangeNombre} value={this.state.nombreCli} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Documento Cliente</Label>
+                                <Input type="text" onChange={this.handleChangeDocumento} value={this.state.documentoCli} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Fecha</Label>
+                                <Input type="date" onChange={this.handleChangeFecha} value={this.state.fecha} />
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Encargado</Label>
+                                <Input type="select" id='encargado' onChange={this.handleChange}>
+                                <option selected>{this.state.encargado}</option>
+                                {this.state.vendedores.map(elemento => (
+                                    <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
+                                ))}
+                                </Input>
+                            </FormGroup>
+                            <FormGroup>
+                                <Row><Label>Productos</Label></Row>
+                                <Row><Button color ="warning" onClick={() => this.estadoModalProductosActualizar()}>Editar</Button></Row>
+                            </FormGroup>
+                            <FormGroup>
+                                <Label>Valor Total</Label>
+                                <Input disabled type="text" value={this.state.valorTotal}></Input>
+                            </FormGroup>
 
-                        <Label>Producto:</Label>
-                        <input className="form-control" name="identificador" type="text" onChange={this.handleChange} value={this.state.form.identificador} />
+                        </Form>
 
-                        <Label>Cantidad:</Label>
-                        <input className="form-control" name="cantidad" type="text" onChange={this.handleChange} value={this.state.form.cantidad} />
 
-                        <Label>Precio Unitario:</Label>
-                        <input className="form-control" name="precioUnitario" type="text" onChange={this.handleChange} value={this.state.form.precioUnitario} />
-
-                        <Label>Fecha de Venta:</Label>
-                        <input className="form-control" name="fechaVenta" type="text" onChange={this.handleChange} value={this.state.form.fechaVenta} />
-
-                        <Label>Documento de Identificacion:</Label>
-                        <input className="form-control" name="documentoIdentificacion" type="text" onChange={this.handleChange} value={this.state.form.documentoIdentificacion} />
-
-                        <Label>Nombre del Cliente:</Label>
-                        <input className="form-control" name="nombreCliente" type="text" onChange={this.handleChange} value={this.state.form.nombreCliente} />
-
-                        <Label>Encargado de la Venta:</Label>
-                        <input className="form-control" name="encargadoVenta" type="text" onChange={this.handleChange} value={this.state.form.encargadoVenta} />
-
-                        <Label>Estado de la Venta:</Label>
-                        <input className="form-control" name="estadoVenta" type="text" onChange={this.handleChange} value={this.state.form.estadoVenta} />
+                        <Modal isOpen = {this.state.modalProductos} >
+                            <ModalHeader>Mensaje Informativo</ModalHeader>
+                            <ModalBody>
+                            {
+                                this.state.productosCadaVenta.map((elemento) => (
+                                
+                                    <div>
+                                        <Container>
+                                            <Row form>
+                                                <Col md={4}>
+                                                    <Label>Cantidad</Label>
+                                                    <Input disabled value={elemento.cantidad}/>
+                                                </Col>
+                                                <Col md={4}>
+                                                
+                                                    <Label >Nombre</Label>
+                                                    <Input disabled value = { elemento.nombre}/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Label>Valor Unitario</Label>
+                                                    <Input disabled value = { elemento.valorUnitario}/>
+                                                </Col>
+                                                <Col md={4}>
+                                                    <Button outline color ="danger" onClick={() => this.handleRemove()}>Eliminar</Button>                            
+                                                </Col>
+                                            </Row>
+                                        </Container>
+                                    </div>
+                                ))
+                                                      
+                            }
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" onClick={this.estadoModalProductosActualizar}>Cancelar</Button>
+                            </ModalFooter>
+                        </Modal>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button color="primary" onClick={() => this.editar(this.state.form)}>Actualizar</Button>
+                        <Button color="primary" onClick={() => this.upSale()}>Actualizar</Button>
                         <Button color="danger" onClick={() => this.cerrarModalActualizar()}>Cancelar</Button>
                     </ModalFooter>
                 </Modal >
@@ -210,7 +301,47 @@ class ventas extends React.Component {
                     <ModalHeader>Mensaje Informativo</ModalHeader>
                     <ModalBody>La venta se actualizo correctamente.</ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={this.editar}>Hecho</Button>
+                        <Button color="primary" onClick={this.estadoModalMensaje}>Hecho</Button>
+                    </ModalFooter>
+                </Modal >
+
+                {/* Modal Ver Productos */}
+                < Modal isOpen={this.state.verProductos} >
+                    <ModalHeader>Productos</ModalHeader>
+                    <ModalBody>
+                        {
+                        this.state.productosCadaVenta.map((elemento,index) => {
+                            return(
+                                <div key = {index}>
+                                    <Form>
+                                        <Row form>
+                                            <Col md={4}>
+                                            <FormGroup>
+                                                <Label>Cantidad</Label>
+                                                <Input disabled value={elemento.cantidad}/>
+                                            </FormGroup>
+                                            </Col>
+                                            <Col md={4}>
+                                            <FormGroup>
+                                                <Label >Nombre</Label>
+                                                <Input disabled value = { elemento.nombre}/>
+                                            </FormGroup>
+                                            </Col>
+                                            <Col md={4}>
+                                            <FormGroup>
+                                                <Label>Valor Unitario</Label>
+                                                <Input disabled value = { elemento.valorUnitario}/>
+                                            </FormGroup>
+                                            </Col>
+                                        </Row>
+                                    </Form>
+                                </div>
+                            )
+                        })                      
+                        }
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.modalVerProductosCerrar}>Hecho</Button>
                     </ModalFooter>
                 </Modal >
 
