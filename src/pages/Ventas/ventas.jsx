@@ -34,9 +34,14 @@ class ventas extends React.Component {
         const ID = await ListProductsVendor();
         this.setState({ vendedores: ID.docs})
       }
-    handleRemove= () => {
-        this.state.productosCadaVenta.splice(0,1);
-        this.setState({ productosCadaVenta : this.productosCadaVenta})
+    handleRemove= (index) => {
+        //this.estadoModalProductosActualizar();
+        var eliminacion = this.state.productosCadaVenta;
+        var elementoEliminado = eliminacion.splice(index,1);
+        var restar = parseInt(elementoEliminado[0].valorUnitario);
+        restar = parseInt(this.state.valorTotal) - restar;
+        this.setState({ valorTotal: restar})
+        this.setState({ productosCadaVenta : eliminacion})
     }
     handleChange = (event) => {
         this.setState({ encargado: event.target.value });
@@ -256,26 +261,26 @@ class ventas extends React.Component {
                             <ModalHeader>Mensaje Informativo</ModalHeader>
                             <ModalBody>
                             {
-                                this.state.productosCadaVenta.map((elemento) => (
+                                this.state.productosCadaVenta.map((elemento,index) => (
                                 
                                     <div>
                                         <Container>
                                             <Row form>
-                                                <Col md={4}>
+                                                <Col md={3}>
                                                     <Label>Cantidad</Label>
                                                     <Input disabled value={elemento.cantidad}/>
                                                 </Col>
-                                                <Col md={4}>
+                                                <Col md={3}>
                                                 
                                                     <Label >Nombre</Label>
                                                     <Input disabled value = { elemento.nombre}/>
                                                 </Col>
-                                                <Col md={4}>
-                                                    <Label>Valor Unitario</Label>
+                                                <Col md={5}>
+                                                    <Label>Valor Total Producto</Label>
                                                     <Input disabled value = { elemento.valorUnitario}/>
                                                 </Col>
                                                 <Col md={4}>
-                                                    <Button outline color ="danger" onClick={() => this.handleRemove()}>Eliminar</Button>                            
+                                                    <Button outline color ="danger" onClick={() => this.handleRemove(index)}>Eliminar</Button>                            
                                                 </Col>
                                             </Row>
                                         </Container>
@@ -285,7 +290,7 @@ class ventas extends React.Component {
                             }
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" onClick={this.estadoModalProductosActualizar}>Cancelar</Button>
+                                <Button color="primary" onClick={this.estadoModalProductosActualizar}>Hecho</Button>
                             </ModalFooter>
                         </Modal>
                     </ModalBody>
@@ -315,21 +320,21 @@ class ventas extends React.Component {
                                 <div key = {index}>
                                     <Form>
                                         <Row form>
-                                            <Col md={4}>
+                                            <Col md={3}>
                                             <FormGroup>
                                                 <Label>Cantidad</Label>
                                                 <Input disabled value={elemento.cantidad}/>
                                             </FormGroup>
                                             </Col>
-                                            <Col md={4}>
+                                            <Col md={3}>
                                             <FormGroup>
                                                 <Label >Nombre</Label>
                                                 <Input disabled value = { elemento.nombre}/>
                                             </FormGroup>
                                             </Col>
-                                            <Col md={4}>
+                                            <Col md={5}>
                                             <FormGroup>
-                                                <Label>Valor Unitario</Label>
+                                                <Label>Valor Total Producto</Label>
                                                 <Input disabled value = { elemento.valorUnitario}/>
                                             </FormGroup>
                                             </Col>
