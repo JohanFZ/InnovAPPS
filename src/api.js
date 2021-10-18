@@ -200,3 +200,9 @@ export const ListSalesForDC = async (documentoCliente) => {
 
   return querySnapshot;
 }
+
+export const updateSales = async (id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal ) => {
+  
+  await updateDoc(doc(db, 'sales', id), {nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal })
+  
+}
