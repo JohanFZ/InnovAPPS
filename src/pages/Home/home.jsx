@@ -45,7 +45,7 @@ class home extends React.Component {
         }
         this.setState({ nombre: nombreVariable, photo: user.photoURL, uid: user.uid, email: user.email });
       } else {
-        console.log('Sesion No Iniciada');
+        window.location.href = '/';
       }
     });
   }
