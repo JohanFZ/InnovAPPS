@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './components/formulario.css';
 import './crear_producto.css'
 import Home from '../Home/home';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import firebase, { db } from '../../firebase-config';
 import { saveProduct, listproduct } from '../../api';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input } from 'reactstrap';
-import productos from './productos';
-import { __importDefault } from 'tslib';
 
 class crear_producto extends React.Component {
 

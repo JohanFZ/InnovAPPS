@@ -1,17 +1,10 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Col, Row, Button, Form, FormGroup, Label, Input, Table } from 'reactstrap';
+import { Col, Row, Button, FormGroup, Label, Input, Table } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './crearVenta.css'
 import Home from '../Home/home'
-import { ListSales, ListProductsVendor, getProducts, ListProductsCash, saveSale } from '../../api';
-
-const data = [
-  { id: "jforero", Nombre: "Johan Forero", Rol: "administrador", Estado: "autorizado" },
-  { id: "jdela", Nombre: "Juan De La Torre", Rol: "vendedor", Estado: "autorizado" },
-
-];
-
+import { ListSales, ListProductsVendor, getProductsDispo, ListProductsCash, saveSale } from '../../api';
 class crearVenta extends React.Component {
 
   //creacion de data donde almacenaremos los listados
@@ -22,11 +15,10 @@ class crearVenta extends React.Component {
     seleccionEncargado: '',
     productos: [],
     seleccionProducto: '',
-    cash: [],
+    cash: '',
     totalVenta: '',
     cantidad: '',
     data: [],
-    data1 : [{nombre:'Alison'},{nombre: 'Johan'}],
     form: {
       nombreCliente: '',
       documentoCliente: '',
@@ -54,7 +46,7 @@ class crearVenta extends React.Component {
     var productoNuevo = {};
     productoNuevo.nombre = this.state.seleccionProducto;
     productoNuevo.cantidad = this.state.cantidad;
-    productoNuevo.valorUnitario = this.state.cash.valorUnitario * this.state.cantidad
+    productoNuevo.valorUnitario = this.state.cash * this.state.cantidad
     var lista = this.state.data;
     lista.push(productoNuevo);
     var total = this.state.totalVenta;
@@ -74,7 +66,7 @@ class crearVenta extends React.Component {
   getCash = async () => {
     const ID = await ListProductsCash(this.state.seleccionProducto);
     if (ID.docs.length > 0) {
-      this.setState({ cash: ID.docs[0].data() })
+      this.setState({ cash: ID.docs[0].data().valorUnitario })
     }else{
       this.setState({ cash: 'No hay producto seleccionado' })
     }
@@ -86,7 +78,7 @@ class crearVenta extends React.Component {
   }
 
   getProductos = async () => {
-    const ID = await getProducts();
+    const ID = await getProductsDispo();
     this.setState({ productos: ID.docs })
   }
 
@@ -116,7 +108,21 @@ class crearVenta extends React.Component {
     document.getElementById('cantidad').value = '';
     document.getElementById('encargado').selectedIndex = 0;
     document.getElementById('producto').selectedIndex= 0;
-    this.setState({data : [], totalVenta : '', cash : []})
+    this.setState({data : [], totalVenta : '', cash : ''})
+  }
+
+  eliminarProducto = (dato) => {
+    var contador = 0;
+    var lista = this.state.data;
+    var total = this.state.totalVenta;
+    lista.map(registro => {
+      if(registro.nombre == dato.nombre && registro.valorUnitario == dato.valorUnitario){
+        lista.splice(contador, 1);
+        this.setState({ totalVenta: parseInt(total - dato.valorUnitario) })
+      }
+      contador++;
+    });
+    this.setState({data: lista});
   }
 
   render() {
@@ -192,7 +198,7 @@ class crearVenta extends React.Component {
               <Col md={5}>
                 <FormGroup>
                   <Label for="nombreInput">Valor Unitario</Label>
-                  <Input type="text" id='valoru' disabled value={this.state.cash.valorUnitario} />
+                  <Input type="text" id='valoru' disabled value={this.state.cash} />
                 </FormGroup>
               </Col>
             </Row>
@@ -203,6 +209,7 @@ class crearVenta extends React.Component {
                   <th>Producto</th>
                   <th>Cantidad</th>
                   <th>Valor Total Producto</th>
+                  <th>Opciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -211,6 +218,7 @@ class crearVenta extends React.Component {
                     <td>{elemento.nombre}</td>
                     <td>{elemento.cantidad}</td>
                     <td>{elemento.valorUnitario}</td>
+                    <td><Button color="danger" onClick={() => this.eliminarProducto(elemento)}>Eliminar Producto</Button></td>
                   </tr>
                 ))}
               </tbody>

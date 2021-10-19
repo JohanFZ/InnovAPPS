@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './login.css';
 import LawFirm from '../../assets/img/law-firm.png';
 import Logo from '../../assets/img/logo.png';
@@ -30,9 +30,6 @@ class Login extends React.Component {
     const auth = getAuth();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
         this.setState({ nombre: user.displayName, photo: user.photoURL, uid: user.uid, email: user.email });

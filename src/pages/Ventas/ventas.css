@@ -1,11 +1,21 @@
 .content-info1 {
     display: inline-block;
     position: relative;
-    width: 800px;
+    width: 900px;
   }
-  
+
   .table1 {
     left: -70px;
   }
 
-  
+  .modaleditp {
+    position: relative;
+    left: -70px;
+    width: 800px;
+    background: #fff;
+    font-size: 16px;
+  }
+
+  .buttona {
+    width: 100%;
+  }

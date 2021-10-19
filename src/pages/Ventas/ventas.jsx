@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label, Form, ListGroup } from 'reactstrap';
-import { Col, Row, FormGroup, Container } from 'reactstrap';
+import React from 'react';
+import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label, Form } from 'reactstrap';
+import { Col, Row, FormGroup } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import './ventas.css'
 import Home from '../Home/home'
 import { UncontrolledButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForDC, updateSales, ListProductsVendor} from '../../api';
-
-
+import { ListSales, ListSalesForID, ListSalesForNC, ListSalesForDC, updateSales, ListProductsVendor } from '../../api';
 class ventas extends React.Component {
 
     //creacion de data donde almacenaremos los listados
@@ -18,7 +16,7 @@ class ventas extends React.Component {
         modalProductos: false,
         verProductos: false,
         busqueda: '',
-        productosCadaVenta:[],
+        productosCadaVenta: [],
         sales: [],
         idBASE: '',
         id: '',
@@ -28,47 +26,50 @@ class ventas extends React.Component {
         encargado: '',
         valorTotal: '',
         vendedores: [],
+        salesChart: []
     };
-    
+
     getVendedores = async () => {
         const ID = await ListProductsVendor();
-        this.setState({ vendedores: ID.docs})
-      }
-    handleRemove= (index) => {
+        this.setState({ vendedores: ID.docs })
+    }
+
+    handleRemove = (index) => {
         //this.estadoModalProductosActualizar();
         var eliminacion = this.state.productosCadaVenta;
-        var elementoEliminado = eliminacion.splice(index,1);
+        var elementoEliminado = eliminacion.splice(index, 1);
         var restar = parseInt(elementoEliminado[0].valorUnitario);
         restar = parseInt(this.state.valorTotal) - restar;
-        this.setState({ valorTotal: restar})
-        this.setState({ productosCadaVenta : eliminacion})
+        this.setState({ valorTotal: restar })
+        this.setState({ productosCadaVenta: eliminacion })
     }
+
     handleChange = (event) => {
         this.setState({ encargado: event.target.value });
-      };
+    };
 
-      handleChangeNombre = (event) => {
+    handleChangeNombre = (event) => {
         this.setState({ nombreCli: event.target.value });
-      };
-    
-      handleChangeDocumento = (event) => {
+    };
+
+    handleChangeDocumento = (event) => {
         this.setState({ documentoCli: event.target.value });
-      };
-    
-      handleChangeFecha = (event) => {
+    };
+
+    handleChangeFecha = (event) => {
         this.setState({ fecha: event.target.value });
-      };
-    
-      handleChangeEncargado = (event) => {
+    };
+
+    handleChangeEncargado = (event) => {
         this.setState({ encargado: event.target.value });
-      };
-    
-    mostrarModalActualizar = (sale,IDBASE) => {
-        this.setState({ productosCadaVenta: sale.productos});
-        this.setState({ idBASE: IDBASE})
-        this.setState({ id : sale.id, nombreCli: sale.nombreCliente, documentoCli: sale.documentoCliente});
-        this.setState({ fecha : sale.fecha, encargado: sale.encargado, valorTotal: sale.valorTotal});
-        this.setState({ modalActualizar: true});
+    };
+
+    mostrarModalActualizar = (sale, IDBASE) => {
+        this.setState({ productosCadaVenta: sale.productos });
+        this.setState({ idBASE: IDBASE })
+        this.setState({ id: sale.id, nombreCli: sale.nombreCliente, documentoCli: sale.documentoCliente });
+        this.setState({ fecha: sale.fecha, encargado: sale.encargado, valorTotal: sale.valorTotal });
+        this.setState({ modalActualizar: true });
     };
 
     cerrarModalActualizar = () => {
@@ -76,21 +77,21 @@ class ventas extends React.Component {
     };
 
     modalVerProductos = (productosVenta) => {
-        this.setState({productosCadaVenta: productosVenta})
-        this.setState({verProductos: !this.state.verProductos})
+        this.setState({ productosCadaVenta: productosVenta })
+        this.setState({ verProductos: !this.state.verProductos })
     }
 
-    modalVerProductosCerrar = () =>{
-        this.setState({verProductos: !this.state.verProductos})
+    modalVerProductosCerrar = () => {
+        this.setState({ verProductos: !this.state.verProductos })
     }
 
 
-    estadoModalProductosActualizar = () =>{
-        this.setState({modalProductos: !this.state.modalProductos})
+    estadoModalProductosActualizar = () => {
+        this.setState({ modalProductos: !this.state.modalProductos })
     }
 
     estadoModalMensaje = () => {
-        this.setState({abiertoMensaje: !this.state.abiertoMensaje})
+        this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
     }
     //Va verificando el contenido del input
     onChange = async e => {
@@ -181,31 +182,31 @@ class ventas extends React.Component {
                                 </UncontrolledButtonDropdown>
                             </InputGroup>
                         </div>
-                        <Table striped className="table">
+                        <Table striped className="table4">
                             <thead>
                                 <tr>
                                     <th className="row-id">#</th>
                                     <th className="row-ValorTotal">Valor Total</th>
                                     <th>Productos</th>
                                     <th>Fecha</th>
-                                    <th className="row-identificacion">D.Identificacion</th>
+                                    <th className="row-identificacion">D. Identificación</th>
                                     <th className="row-cliente">N Cliente</th>
                                     <th className="row-encargado">Encargado</th>
                                     <th> Acciones</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody className="table4">
                                 {this.state.sales.map(elemento => (
                                     <tr>
                                         <td>{elemento.data().id}</td>
                                         <td>{elemento.data().valorTotal}</td>
-                                        <td><Button outline color="primary" onClick = {() => this.modalVerProductos(elemento.data().productos)}>Ver Productos</Button></td>
+                                        <td><Button outline color="primary" onClick={() => this.modalVerProductos(elemento.data().productos)}>Ver Productos</Button></td>
                                         <td>{elemento.data().fecha}</td>
                                         <td>{elemento.data().documentoCliente}</td>
                                         <td>{elemento.data().nombreCliente}</td>
                                         <td>{elemento.data().encargado}</td>
-                                        <td><Button color="primary" onClick={() => this.mostrarModalActualizar(elemento.data(),elemento.id)}>Editar</Button></td>
+                                        <td><Button color="primary" onClick={() => this.mostrarModalActualizar(elemento.data(), elemento.id)}>Editar</Button></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -239,15 +240,15 @@ class ventas extends React.Component {
                             <FormGroup>
                                 <Label>Encargado</Label>
                                 <Input type="select" id='encargado' onChange={this.handleChange}>
-                                <option selected>{this.state.encargado}</option>
-                                {this.state.vendedores.map(elemento => (
-                                    <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
-                                ))}
+                                    <option selected>{this.state.encargado}</option>
+                                    {this.state.vendedores.map(elemento => (
+                                        <option key={elemento.data().id} value={elemento.data().nombre}>{elemento.data().nombre}</option>
+                                    ))}
                                 </Input>
                             </FormGroup>
                             <FormGroup>
                                 <Row><Label>Productos</Label></Row>
-                                <Row><Button color ="warning" onClick={() => this.estadoModalProductosActualizar()}>Editar</Button></Row>
+                                <Button color="warning" className="buttona" onClick={() => this.estadoModalProductosActualizar()}>Editar</Button>
                             </FormGroup>
                             <FormGroup>
                                 <Label>Valor Total</Label>
@@ -257,39 +258,38 @@ class ventas extends React.Component {
                         </Form>
 
 
-                        <Modal isOpen = {this.state.modalProductos} >
-                            <ModalHeader>Mensaje Informativo</ModalHeader>
-                            <ModalBody>
-                            {
-                                this.state.productosCadaVenta.map((elemento,index) => (
-                                
-                                    <div>
-                                        <Container>
+                        <Modal isOpen={this.state.modalProductos}>
+                            <ModalHeader className="modaleditp">Editar Productos</ModalHeader>
+                            <ModalBody className="modaleditp">
+                                {
+                                    this.state.productosCadaVenta.map((elemento, index) => (
+
+                                        <div>
                                             <Row form>
-                                                <Col md={3}>
+                                                <Col md={2}>
                                                     <Label>Cantidad</Label>
-                                                    <Input disabled value={elemento.cantidad}/>
-                                                </Col>
-                                                <Col md={3}>
-                                                
-                                                    <Label >Nombre</Label>
-                                                    <Input disabled value = { elemento.nombre}/>
+                                                    <Input disabled value={elemento.cantidad} />
                                                 </Col>
                                                 <Col md={5}>
-                                                    <Label>Valor Total Producto</Label>
-                                                    <Input disabled value = { elemento.valorUnitario}/>
+
+                                                    <Label >Nombre</Label>
+                                                    <Input disabled value={elemento.nombre} />
                                                 </Col>
-                                                <Col md={4}>
-                                                    <Button outline color ="danger" onClick={() => this.handleRemove(index)}>Eliminar</Button>                            
+                                                <Col md={3}>
+                                                    <Label>Valor Total</Label>
+                                                    <Input disabled value={elemento.valorUnitario} />
+                                                </Col>
+                                                <Col md={2}>
+                                                    <br />
+                                                    <Button outline color="danger" onClick={() => this.handleRemove(index)}>Eliminar</Button>
                                                 </Col>
                                             </Row>
-                                        </Container>
-                                    </div>
-                                ))
-                                                      
-                            }
+                                        </div>
+                                    ))
+
+                                }
                             </ModalBody>
-                            <ModalFooter>
+                            <ModalFooter className="modaleditp">
                                 <Button color="primary" onClick={this.estadoModalProductosActualizar}>Hecho</Button>
                             </ModalFooter>
                         </Modal>
@@ -315,34 +315,34 @@ class ventas extends React.Component {
                     <ModalHeader>Productos</ModalHeader>
                     <ModalBody>
                         {
-                        this.state.productosCadaVenta.map((elemento,index) => {
-                            return(
-                                <div key = {index}>
-                                    <Form>
-                                        <Row form>
-                                            <Col md={3}>
-                                            <FormGroup>
-                                                <Label>Cantidad</Label>
-                                                <Input disabled value={elemento.cantidad}/>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col md={3}>
-                                            <FormGroup>
-                                                <Label >Nombre</Label>
-                                                <Input disabled value = { elemento.nombre}/>
-                                            </FormGroup>
-                                            </Col>
-                                            <Col md={5}>
-                                            <FormGroup>
-                                                <Label>Valor Total Producto</Label>
-                                                <Input disabled value = { elemento.valorUnitario}/>
-                                            </FormGroup>
-                                            </Col>
-                                        </Row>
-                                    </Form>
-                                </div>
-                            )
-                        })                      
+                            this.state.productosCadaVenta.map((elemento, index) => {
+                                return (
+                                    <div key={index}>
+                                        <Form>
+                                            <Row form>
+                                                <Col md={3}>
+                                                    <FormGroup>
+                                                        <Label>Cantidad</Label>
+                                                        <Input disabled value={elemento.cantidad} />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md={3}>
+                                                    <FormGroup>
+                                                        <Label >Nombre</Label>
+                                                        <Input disabled value={elemento.nombre} />
+                                                    </FormGroup>
+                                                </Col>
+                                                <Col md={5}>
+                                                    <FormGroup>
+                                                        <Label>Valor Total Producto</Label>
+                                                        <Input disabled value={elemento.valorUnitario} />
+                                                    </FormGroup>
+                                                </Col>
+                                            </Row>
+                                        </Form>
+                                    </div>
+                                )
+                            })
                         }
                     </ModalBody>
                     <ModalFooter>

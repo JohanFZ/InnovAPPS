@@ -1,5 +1,5 @@
 import firebase, { db } from './firebase-config';
-import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, where, orderBy, endAt, startAt } from "firebase/firestore";
+import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, where, orderBy, endAt, startAt, limit } from "firebase/firestore";
 
 
 // Metodo para guardar usuario
@@ -22,7 +22,7 @@ export const ListUser = async (id) => {
 //Metodo para listar todos los usuarios
 export const ListUsers = async () => {
 
-  const result = await getDocs(query(collection(db, 'users')));
+  const result = await getDocs(query(collection(db, 'users'), orderBy('id')));
 
   return result;
 }
@@ -64,11 +64,19 @@ export const updateUser = async (id, rol, estado) => {
 
 export const getProducts = async() => {
 
-  const result = await getDocs(query(collection(db, 'Product')));
+  const result = await getDocs(query(collection(db, 'Product'), orderBy('id')));
 
   return result;
 
  }
+
+export const getProductsDispo = async () => {
+
+  const result = await getDocs(query(collection(db, 'Product'), where("estado", "==", "Disponible")));
+
+  return result;
+
+}
 
 // Metodo para guardar producto
 export const saveProduct = (id, codigo, nombre, valorUnitario, estado) => {
@@ -120,10 +128,22 @@ export const updateProducto = async (id, codigo, nombre, valorUnitario, estado) 
 //Metodo para listar todos las ventas
 export const ListSales = async () => {
 
-  const result = await getDocs(query(collection(db, 'sales')));
+  const result = await getDocs(query(collection(db, 'sales'), orderBy('id')));
 
   return result;
 }
+
+// export const ListSales2 = async () => {
+
+//   const result = await getDocs(query(collection(db, 'sales')));
+
+//   var data = [];
+//   result.forEach((doc) => {
+//     data.push({id: doc.data().id,x:doc.data().fecha, y: doc.data().valorTotal});
+//   });
+
+//   return data;
+// }
 
 //Metodo para realizar busqueda de productos por id
 export const ListProductsVendor= async () => {
@@ -202,7 +222,7 @@ export const ListSalesForDC = async (documentoCliente) => {
 }
 
 export const updateSales = async (id, nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal ) => {
-  
+
   await updateDoc(doc(db, 'sales', id), {nombreCliente, documentoCliente, fecha, encargado, productos, valorTotal })
-  
+
 }

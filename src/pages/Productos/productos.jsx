@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { Table, Button, InputGroup, Input, Modal, ModalHeader, ModalBody, ModalFooter, Label,UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import {getProducts,ListProductsForName,ListProductsForID,updateProducto} from '../../api';
 import 'bootstrap/dist/css/bootstrap.css';
 import './productos.css'
 import Home from '../Home/home'
-import { getDocs } from '@firebase/firestore';
 
 
 
@@ -18,12 +17,12 @@ class productos extends React.Component {
     console.log()
     this.setState({ data: product.docs });
   }
-  
+
   //Ciclo de vida (Cuandos se renderiza el componente)
   componentDidMount(){
     this.getProductList();
   }
-  
+
 
   //creacion de data donde almacenaremos los listados
   state = {
@@ -72,7 +71,7 @@ class productos extends React.Component {
   }
 
   filtrarElementosporNombre = async () => {
-    
+
     const product = await ListProductsForName(this.state.busqueda);
     if (product.docs.length === 0) {
       this.getProductList();
@@ -115,7 +114,7 @@ class productos extends React.Component {
     this.setState({ abiertoMensaje: !this.state.abiertoMensaje })
   }
 
- 
+
 
 render() {
   return (
