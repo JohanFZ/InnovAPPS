@@ -158,7 +158,7 @@ class ventas extends React.Component {
                 <Home />
 
                 {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
-                <section class="home-section">
+                <section className="home-section">
                     <h1>Listado de Ventas</h1>
                     <div className="content-info1">
                         <div className="search">

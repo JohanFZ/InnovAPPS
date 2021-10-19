@@ -1,5 +1,5 @@
 import firebase, { db } from './firebase-config';
-import { collection, getDocs, getDoc, query, doc, addDoc, deleteDoc, updateDoc, where, orderBy, endAt, startAt, limit } from "firebase/firestore";
+import { collection, getDocs, query, doc, addDoc, updateDoc, where, orderBy, endAt, startAt } from "firebase/firestore";
 
 
 // Metodo para guardar usuario

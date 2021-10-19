@@ -107,8 +107,8 @@ class usuarios extends React.Component {
         <Home />
 
         {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
-        <section class="home-section">
-          <h1 class="titulo">Listado de Usuarios</h1>
+        <section className="home-section">
+          <h1 className="titulo">Listado de Usuarios</h1>
           <div className="content-info">
             <div className="search">
               <InputGroup>

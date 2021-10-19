@@ -125,7 +125,7 @@ render() {
 
     {/* Todo lo del lado derecho debe ir entre esta etiqueta section */}
 
-      <section class="home-section">
+      <section className="home-section">
         <h1>Listado de Productos</h1>
         <div className="content-info">
           <div className="search">

@@ -2,8 +2,8 @@ import React from 'react'
 import './home.css'
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import firebase, { db } from '../../firebase-config';
-import { saveUser, ListUser, ListUsers } from '../../api';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {  ListUser } from '../../api';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 

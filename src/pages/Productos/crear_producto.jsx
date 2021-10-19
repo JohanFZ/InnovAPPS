@@ -68,7 +68,7 @@ class crear_producto extends React.Component {
       <div>
         <Home />
 
-        <section class="home-section">
+        <section className="home-section">
           <div className="container">
             <form className="formulario" id="formulario">
               <center><h1>Registro de Productos</h1></center>
